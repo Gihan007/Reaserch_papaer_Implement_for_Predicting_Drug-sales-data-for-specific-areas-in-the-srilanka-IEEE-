@@ -1,131 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About - Medical Drug Sales Prediction</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-position: center;
-      background: url('{{ url_for('static', filename='images/m6.jpg') }}');
-      background-size: cover;
-    }
-
-    .content-section {
-      width: 80%;
-      max-width: 800px;
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: 15px;
-      padding: 20px 30px;
-      text-align: left;
-      font-size: 20px;
-      color: rgb(8, 1, 77);
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
-      line-height: 1.6;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .content-section h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
-      color: #09024a;
-      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
-    }
-
-    .navbar a {
-      display: block;
-      text-align: center;
-      float: left;
-      padding: 6px;
-      font-size: 30px;
-      color: rgb(255, 255, 255);
-      text-shadow: 2px 3px 5px black;
-    }
-
-    .navbar a:hover {
-      color: #00a6e7;
-    }
-
-    .sidenav a {
-      position: absolute;
-      left: -300px;
-      transition: 0.9s;
-      padding: 15px;
-      width: 350px;
-      text-decoration: none;
-      font-size: 20px;
-      color: white;
-      border-radius: 0 5px 5px 0;
-      box-shadow: 2px 5px 8px black;
-      text-align: center;
-    }
-
-    .sidenav a:hover {
-      left: 0;
-    }
-
-    .facebook {
-      top: 100px;
-      background-color: #0f22b1;
-    }
-
-    .twitter {
-      top: 160px;
-      background-color: #041c75;
-    }
-
-    .google {
-      top: 220px;
-      background-color: #09004d;
-    }
-
-    .fa-facebook {
-      float: right;
-      right: 20%;
-    }
-
-    .fa-twitter {
-      float: right;
-      right: 15%;
-    }
-
-    .fa-google {
-      float: right;
-      right: 15%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Drug Sales Prediction System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .about-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        .feature-box {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .research-highlight {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        .model-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            transition: transform 0.3s;
+        }
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="navbar">
-      <a href="#" target=""><i class="fa fa-globe"></i></a>
-      <a href="#" target=""><i class="fa fa-envelope"></i></a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Drug Sales Prediction</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/forecast">Predict</a>
+                <a class="nav-link" href="/meta-learning">Meta-Learning</a>
+                <a class="nav-link active" href="/about">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="about-hero">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">About Our Research</h1>
+            <p class="lead">Cutting-edge AI for pharmaceutical sales forecasting in Sri Lanka</p>
+        </div>
     </div>
-    <div class="content-section">
-      <h1>About Us</h1>
-      <p>Welcome to our Medical Drug Sales Prediction platform, an innovative solution aimed at revolutionizing inventory management for pharmacists and drug sellers in Sri Lanka.</p>
-      <p>Our mission is to empower the pharmaceutical industry with accurate, data-driven insights that enable better decision-making and more efficient stock management. Through advanced data analysis and machine learning techniques, our platform helps predict drug sales, ensuring optimal stock levels, reducing wastage, and improving the availability of essential medicines.</p>
-      <p>We are a dedicated team of data scientists, software developers, and industry experts committed to creating impactful technological solutions that address real-world challenges. Our vision is to extend the capabilities of our platform to offer comprehensive pharmacy management tools that contribute to a more resilient healthcare system in Sri Lanka and beyond.</p>
-      <p>Thank you for choosing our platform. Together, we can make a significant impact on the pharmaceutical industry and improve the availability of essential medicines for all.</p>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="feature-box">
+                    <h3 class="text-center mb-4">IEEE Research Project</h3>
+                    <p class="lead text-center">Predicting Drug Sales Data for Specific Areas in Sri Lanka</p>
+                    <p>This research project implements advanced machine learning and deep learning techniques to forecast pharmaceutical sales across different regions in Sri Lanka. Our system combines traditional statistical methods with cutting-edge AI approaches to provide accurate, interpretable, and uncertainty-aware predictions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="research-highlight">
+            <h3 class="text-center mb-4">Research Contributions</h3>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h4>10+ ML Models</h4>
+                    <p>Comprehensive comparison of traditional and deep learning approaches</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h4>Meta-Learning</h4>
+                    <p>Learn-to-learn across drug categories with few-shot adaptation</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h4>Uncertainty Quantification</h4>
+                    <p>Bayesian methods for reliable decision-making</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <h3>Machine Learning Models</h3>
+                <div class="model-card">
+                    <h5>Traditional Models</h5>
+                    <ul>
+                        <li>LightGBM - Gradient boosting framework</li>
+                        <li>XGBoost - Extreme Gradient Boosting</li>
+                        <li>Prophet - Time series forecasting by Facebook</li>
+                        <li>SARIMAX - Seasonal ARIMA with exogenous variables</li>
+                    </ul>
+                </div>
+
+                <div class="model-card">
+                    <h5>Deep Learning Models</h5>
+                    <ul>
+                        <li>LSTM - Long Short-Term Memory networks</li>
+                        <li>GRU - Gated Recurrent Units</li>
+                        <li>Transformer - Attention-based architecture</li>
+                        <li>Temporal Fusion Transformer (TFT)</li>
+                        <li>N-BEATS - Neural basis expansion analysis</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h3>Advanced Features</h3>
+                <div class="model-card">
+                    <h5>Meta-Learning</h5>
+                    <ul>
+                        <li>MAML - Model-Agnostic Meta-Learning</li>
+                        <li>Few-shot Learning - Adapt with minimal data</li>
+                        <li>Transfer Learning - Cross-category knowledge transfer</li>
+                    </ul>
+                </div>
+
+                <div class="model-card">
+                    <h5>Interpretability & Uncertainty</h5>
+                    <ul>
+                        <li>SHAP Values - Feature importance explanations</li>
+                        <li>Counterfactual Analysis - What-if scenarios</li>
+                        <li>Bayesian Neural Networks - Uncertainty estimation</li>
+                        <li>Monte Carlo Dropout - Prediction intervals</li>
+                        <li>Conformal Prediction - Guaranteed coverage</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-box">
+            <h3 class="text-center mb-4">Data & Methodology</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Dataset</h5>
+                    <ul>
+                        <li>8 drug categories (C1-C8)</li>
+                        <li>10+ years of weekly sales data</li>
+                        <li>Sri Lankan pharmaceutical market</li>
+                        <li>517 weeks of historical data</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>Evaluation Metrics</h5>
+                    <ul>
+                        <li>Mean Absolute Error (MAE)</li>
+                        <li>Root Mean Square Error (RMSE)</li>
+                        <li>Mean Absolute Percentage Error (MAPE)</li>
+                        <li>R² Score</li>
+                        <li>Model calibration metrics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <h3>Ready to Explore?</h3>
+            <p class="mb-4">Experience the power of advanced AI for pharmaceutical forecasting</p>
+            <a href="/forecast" class="btn btn-primary btn-lg me-3">Start Forecasting</a>
+            <a href="/meta-learning" class="btn btn-outline-primary btn-lg">Meta-Learning Dashboard</a>
+        </div>
     </div>
-    <div id="mySidenav" class="sidenav">
-      <a class="facebook" href="#">medicalsales<i class="fa fa-facebook"></i></a>
-      <a class="twitter" href="#">@medicalsales<i class="fa fa-twitter"></i></a>
-      <a class="google" href="#">medicalsales@gmail.com<i class="fa fa-google"></i></a>
-    </div>
-  </div>
+
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container text-center">
+            <p>&copy; 2025 Drug Sales Prediction System. IEEE Research Project.</p>
+            <p class="mb-0">Advanced AI for Healthcare Decision Making</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

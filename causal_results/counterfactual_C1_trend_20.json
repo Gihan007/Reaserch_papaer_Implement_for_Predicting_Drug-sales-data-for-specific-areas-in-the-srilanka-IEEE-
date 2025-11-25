@@ -1,0 +1,12 @@
+{
+  "intervention_variable": "trend",
+  "intervention_value": 316.8,
+  "change_percent": 20,
+  "outcome_variable": "sales",
+  "actual_mean": 37.66247145213862,
+  "counterfactual_mean": 37.929800205152645,
+  "effect_size": 0.26732875301402714,
+  "percent_change": 0.7098014089535997,
+  "model_score": 0.004634179805110605,
+  "timestamp": "2025-11-25T16:08:51.893995"
+}

@@ -1,0 +1,12 @@
+{
+  "intervention_variable": "sales_lag1",
+  "intervention_value": 45.160771683160384,
+  "change_percent": 20,
+  "outcome_variable": "sales",
+  "actual_mean": 37.66247145213862,
+  "counterfactual_mean": 37.91742030513681,
+  "effect_size": 0.25494885299819003,
+  "percent_change": 0.6769307567140899,
+  "model_score": 0.008916005713779485,
+  "timestamp": "2025-11-25T16:08:51.623524"
+}

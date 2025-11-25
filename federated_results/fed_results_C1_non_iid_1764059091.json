@@ -1,0 +1,60 @@
+{
+  "num_rounds": 6,
+  "num_clients": 5,
+  "final_metrics": {
+    "mae": 0.16662612844327962,
+    "rmse": 0.20932218400620659
+  },
+  "round_history": [
+    {
+      "round": 1,
+      "clients_participated": 4,
+      "global_metrics": {
+        "mae": 0.17825245637886272,
+        "rmse": 0.2224302822160061
+      }
+    },
+    {
+      "round": 2,
+      "clients_participated": 4,
+      "global_metrics": {
+        "mae": 0.1736475873622835,
+        "rmse": 0.21790253385937491
+      }
+    },
+    {
+      "round": 3,
+      "clients_participated": 4,
+      "global_metrics": {
+        "mae": 0.17100402129733044,
+        "rmse": 0.21422204047310545
+      }
+    },
+    {
+      "round": 4,
+      "clients_participated": 4,
+      "global_metrics": {
+        "mae": 0.16892113987333285,
+        "rmse": 0.21220184640302314
+      }
+    },
+    {
+      "round": 5,
+      "clients_participated": 4,
+      "global_metrics": {
+        "mae": 0.16741641124953394,
+        "rmse": 0.21014026904374195
+      }
+    },
+    {
+      "round": 6,
+      "clients_participated": 4,
+      "global_metrics": {
+        "mae": 0.16662612844327962,
+        "rmse": 0.20932218400620659
+      }
+    }
+  ],
+  "training_time": 1764059091.8232381,
+  "aggregation_method": "fedavg"
+}

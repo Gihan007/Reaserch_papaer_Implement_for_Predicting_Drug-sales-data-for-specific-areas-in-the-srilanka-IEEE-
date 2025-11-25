@@ -1,0 +1,245 @@
+{
+  "category": "C1",
+  "data_points": 505,
+  "causal_relationships": {
+    "causal_drivers": [
+      {
+        "variable": "week",
+        "correlation": 0.22552828351060816,
+        "strength": "weak",
+        "direction": "positive",
+        "lag": 0
+      },
+      {
+        "variable": "trend",
+        "correlation": 0.22552828351060816,
+        "strength": "weak",
+        "direction": "positive",
+        "lag": 0
+      },
+      {
+        "variable": "year",
+        "correlation": 0.2255132354874405,
+        "strength": "weak",
+        "direction": "positive",
+        "lag": 0
+      },
+      {
+        "variable": "sales_lag12",
+        "correlation": 0.21357443362279885,
+        "strength": "weak",
+        "direction": "positive",
+        "lag": 0
+      },
+      {
+        "variable": "sales_lag4",
+        "correlation": 0.1202895403248427,
+        "strength": "weak",
+        "direction": "positive",
+        "lag": -4
+      },
+      {
+        "variable": "sales_lag1",
+        "correlation": 0.0710115768798271,
+        "strength": "weak",
+        "direction": "positive",
+        "lag": -1
+      },
+      {
+        "variable": "is_rainy_season",
+        "correlation": 0.057997862828662775,
+        "strength": "weak",
+        "direction": "positive",
+        "lag": 4
+      },
+      {
+        "variable": "cyclical_sin",
+        "correlation": -0.05710608383046047,
+        "strength": "weak",
+        "direction": "negative",
+        "lag": -5
+      },
+      {
+        "variable": "cyclical_cos",
+        "correlation": -0.048212384637272274,
+        "strength": "weak",
+        "direction": "negative",
+        "lag": 5
+      },
+      {
+        "variable": "is_holiday_season",
+        "correlation": -0.044221643858782814,
+        "strength": "weak",
+        "direction": "negative",
+        "lag": 4
+      }
+    ],
+    "granger_causality": [
+      {
+        "cause_variable": "week",
+        "target_variable": "sales",
+        "granger_causal": "True",
+        "min_p_value": 1.4608414667317976e-06,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "month",
+        "target_variable": "sales",
+        "granger_causal": "True",
+        "min_p_value": 0.02042220009436809,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "quarter",
+        "target_variable": "sales",
+        "granger_causal": "True",
+        "min_p_value": 0.02648620430465422,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "year",
+        "target_variable": "sales",
+        "granger_causal": "True",
+        "min_p_value": 1.4180459529018354e-06,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "sales_lag1",
+        "target_variable": "sales",
+        "granger_causal": "True",
+        "min_p_value": 0.0003302305081489414,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "sales_lag4",
+        "target_variable": "sales",
+        "granger_causal": "True",
+        "min_p_value": 8.857408094630301e-05,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "sales_lag12",
+        "target_variable": "sales",
+        "granger_causal": "True",
+        "min_p_value": 0.02410454241097459,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "is_holiday_season",
+        "target_variable": "sales",
+        "granger_causal": "False",
+        "min_p_value": 0.7260902058727323,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "is_rainy_season",
+        "target_variable": "sales",
+        "granger_causal": "False",
+        "min_p_value": 0.2535288624300418,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "trend",
+        "target_variable": "sales",
+        "granger_causal": "True",
+        "min_p_value": 1.4608414667317976e-06,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "cyclical_sin",
+        "target_variable": "sales",
+        "granger_causal": "False",
+        "min_p_value": 0.3208698376377168,
+        "tested_lags": 5
+      },
+      {
+        "cause_variable": "cyclical_cos",
+        "target_variable": "sales",
+        "granger_causal": "False",
+        "min_p_value": 0.2567482544147734,
+        "tested_lags": 5
+      }
+    ],
+    "correlation_matrix": {
+      "week": 0.22552828351060816,
+      "month": -0.008365296254257326,
+      "quarter": 0.011836791641704937,
+      "year": 0.2255132354874405,
+      "sales_lag1": 0.0710115768798271,
+      "sales_lag4": 0.1202895403248427,
+      "sales_lag12": 0.21357443362279885,
+      "is_holiday_season": -0.044221643858782814,
+      "is_rainy_season": 0.057997862828662775,
+      "trend": 0.22552828351060816,
+      "cyclical_sin": -0.05710608383046047,
+      "cyclical_cos": -0.048212384637272274
+    },
+    "data_points": 505,
+    "timestamp": "2025-11-25T16:08:51.757912"
+  },
+  "causal_effects": {
+    "week": {
+      "treatment": "week",
+      "outcome": "sales",
+      "confounders": [
+        "month",
+        "quarter",
+        "trend"
+      ],
+      "estimates": {},
+      "placebo_test": null,
+      "identified_estimand": "Estimand type: EstimandType.NONPARAMETRIC_ATE\n\n### Estimand : 1\nEstimand name: backdoor\nEstimand expression:\n   d                                 \n\u2500\u2500\u2500\u2500\u2500\u2500\u2500(E[sales|trend,month,quarter])\nd[week]                              \nEstimand assumption 1, Unconfoundedness: If U\u2192{week} and U\u2192sales then P(sales|week,trend,month,quarter,U) = P(sales|week,trend,month,quarter)\n\n### Estimand : 2\nEstimand name: iv\nNo such variable(s) found!\n\n### Estimand : 3\nEstimand name: frontdoor\nNo such variable(s) found!\n\n### Estimand : 4\nEstimand name: general_adjustment\nEstimand expression:\n   d                                 \n\u2500\u2500\u2500\u2500\u2500\u2500\u2500(E[sales|trend,month,quarter])\nd[week]                              \nEstimand assumption 1, Unconfoundedness: If U\u2192{week} and U\u2192sales then P(sales|week,trend,month,quarter,U) = P(sales|week,trend,month,quarter)\n",
+      "timestamp": "2025-11-25T16:08:51.796710"
+    },
+    "trend": {
+      "error": "graph should be directed acyclic"
+    },
+    "year": {
+      "treatment": "year",
+      "outcome": "sales",
+      "confounders": [
+        "month",
+        "quarter",
+        "trend"
+      ],
+      "estimates": {},
+      "placebo_test": null,
+      "identified_estimand": "Estimand type: EstimandType.NONPARAMETRIC_ATE\n\n### Estimand : 1\nEstimand name: backdoor\nEstimand expression:\n   d                                 \n\u2500\u2500\u2500\u2500\u2500\u2500\u2500(E[sales|trend,month,quarter])\nd[year]                              \nEstimand assumption 1, Unconfoundedness: If U\u2192{year} and U\u2192sales then P(sales|year,trend,month,quarter,U) = P(sales|year,trend,month,quarter)\n\n### Estimand : 2\nEstimand name: iv\nNo such variable(s) found!\n\n### Estimand : 3\nEstimand name: frontdoor\nNo such variable(s) found!\n\n### Estimand : 4\nEstimand name: general_adjustment\nEstimand expression:\n   d                                 \n\u2500\u2500\u2500\u2500\u2500\u2500\u2500(E[sales|trend,month,quarter])\nd[year]                              \nEstimand assumption 1, Unconfoundedness: If U\u2192{year} and U\u2192sales then P(sales|year,trend,month,quarter,U) = P(sales|year,trend,month,quarter)\n",
+      "timestamp": "2025-11-25T16:08:51.860526"
+    }
+  },
+  "counterfactuals": {
+    "week": {
+      "intervention_variable": "week",
+      "intervention_value": 316.8,
+      "change_percent": 20,
+      "outcome_variable": "sales",
+      "actual_mean": 37.66247145213862,
+      "counterfactual_mean": 37.92980020515603,
+      "effect_size": 0.2673287530174093,
+      "percent_change": 0.7098014089625798,
+      "model_score": 0.004634179805098504,
+      "timestamp": "2025-11-25T16:08:51.876827"
+    },
+    "trend": {
+      "intervention_variable": "trend",
+      "intervention_value": 316.8,
+      "change_percent": 20,
+      "outcome_variable": "sales",
+      "actual_mean": 37.66247145213862,
+      "counterfactual_mean": 37.929800205152645,
+      "effect_size": 0.26732875301402714,
+      "percent_change": 0.7098014089535997,
+      "model_score": 0.004634179805110605,
+      "timestamp": "2025-11-25T16:08:51.893995"
+    }
+  },
+  "causal_graph_path": "./causal_results\\causal_graph.png",
+  "analysis_timestamp": "2025-11-25T16:08:52.544833",
+  "methodology": {
+    "causal_discovery": "Correlation + Granger Causality",
+    "effect_estimation": "DoWhy (if available)",
+    "counterfactuals": "Regression-based",
+    "graph_visualization": "NetworkX + Matplotlib"
+  }
+}

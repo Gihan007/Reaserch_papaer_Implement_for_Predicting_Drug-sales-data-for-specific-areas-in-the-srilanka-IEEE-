@@ -1,0 +1,33 @@
+{
+  "category": "C1",
+  "best_architecture": {
+    "num_layers": 3,
+    "hidden_dims": [
+      256,
+      64,
+      256
+    ],
+    "dropout_rates": [
+      0.1,
+      0.1,
+      0.2
+    ],
+    "activation": "tanh",
+    "learning_rate": 0.0005,
+    "batch_size": 64,
+    "seq_length": 30
+  },
+  "best_metrics": {
+    "val_loss": 0.07052852399647236,
+    "mae": 0.25022760033607483,
+    "rmse": 0.2913449874994039,
+    "epochs_trained": 11
+  },
+  "fitness_history": [
+    0.06976083293557167,
+    0.06851487513631582,
+    0.07052852399647236
+  ],
+  "total_architectures_evaluated": 80,
+  "search_time": 1764063537.4207852
+}

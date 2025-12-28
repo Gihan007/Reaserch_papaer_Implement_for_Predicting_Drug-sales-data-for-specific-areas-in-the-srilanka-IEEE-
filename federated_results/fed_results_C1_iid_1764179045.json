@@ -1,0 +1,28 @@
+{
+  "num_rounds": 2,
+  "num_clients": 3,
+  "final_metrics": {
+    "mae": 0.1797021121904254,
+    "rmse": 0.22427903992870385
+  },
+  "round_history": [
+    {
+      "round": 1,
+      "clients_participated": 2,
+      "global_metrics": {
+        "mae": 0.19533493765286708,
+        "rmse": 0.2410920432878816
+      }
+    },
+    {
+      "round": 2,
+      "clients_participated": 2,
+      "global_metrics": {
+        "mae": 0.1797021121904254,
+        "rmse": 0.22427903992870385
+      }
+    }
+  ],
+  "training_time": 1764179045.558748,
+  "aggregation_method": "fedavg"
+}

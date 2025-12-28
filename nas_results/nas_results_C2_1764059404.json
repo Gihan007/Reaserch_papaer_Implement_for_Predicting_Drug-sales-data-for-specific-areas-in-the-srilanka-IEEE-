@@ -1,0 +1,36 @@
+{
+  "category": "C2",
+  "best_architecture": {
+    "num_layers": 5,
+    "hidden_dims": [
+      128,
+      128,
+      128,
+      128,
+      32
+    ],
+    "dropout_rates": [
+      0.4,
+      0.0,
+      0.1,
+      0.0,
+      0.2
+    ],
+    "activation": "leaky_relu",
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "seq_length": 21
+  },
+  "best_metrics": {
+    "val_loss": 0.0780610553920269,
+    "mae": 0.24953867495059967,
+    "rmse": 0.2897354232011246,
+    "epochs_trained": 12
+  },
+  "fitness_history": [
+    0.0754002183675766,
+    0.0780610553920269
+  ],
+  "total_architectures_evaluated": 60,
+  "search_time": 1764059404.1321635
+}

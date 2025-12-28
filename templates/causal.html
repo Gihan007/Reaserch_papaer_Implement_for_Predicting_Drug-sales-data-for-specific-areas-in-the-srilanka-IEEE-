@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Causal Analysis - PharmaPredictAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>PharmaPredictAI</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/forecast" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Forecasting</span>
+                </a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link active">
+                        <i class="fas fa-brain"></i>
+                        <span>AI Models</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="/meta-learning" class="dropdown-item">
+                            <i class="fas fa-brain"></i>
+                            <span>Meta Learning</span>
+                        </a>
+                        <a href="/advanced" class="dropdown-item">
+                            <i class="fas fa-robot"></i>
+                            <span>Advanced AI</span>
+                        </a>
+                        <a href="/causal" class="dropdown-item">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Causal Analysis</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="/analytics" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="notificationBtn" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-dropdown">
+                    <button class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="User">
+                        <span class="user-name">Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content causal-page">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">
+                    <i class="fas fa-project-diagram"></i> Causal Inference & Analysis
+                </h1>
+                <p class="page-subtitle">Discover causal relationships and estimate treatment effects</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="discovery">
+                    <i class="fas fa-search"></i> Causal Discovery
+                </button>
+                <button class="tab-btn" data-tab="effects">
+                    <i class="fas fa-chart-area"></i> Effect Estimation
+                </button>
+                <button class="tab-btn" data-tab="counterfactual">
+                    <i class="fas fa-flask"></i> Counterfactuals
+                </button>
+                <button class="tab-btn" data-tab="complete">
+                    <i class="fas fa-sitemap"></i> Complete Analysis
+                </button>
+            </div>
+        </div>
+
+        <!-- Causal Discovery Tab -->
+        <div id="discoveryTab" class="tab-content active">
+            <div class="info-banner">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Causal Discovery</strong>
+                    <p>Identify causal relationships between variables using constraint-based and score-based methods</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2 class="form-title">Discovery Configuration</h2>
+                <form id="discoveryForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="discoveryCategory">Drug Category</label>
+                            <select id="discoveryCategory" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="C1">C1 - Anti-inflammatory</option>
+                                <option value="C2">C2 - Anti-inflammatory</option>
+                                <option value="C3">C3 - Analgesics</option>
+                                <option value="C4">C4 - Analgesics</option>
+                                <option value="C5">C5 - Psycholeptics</option>
+                                <option value="C6">C6 - Psycholeptics</option>
+                                <option value="C7">C7 - Respiratory</option>
+                                <option value="C8">C8 - Antihistamines</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="maxLags">Maximum Lags</label>
+                            <input type="number" id="maxLags" value="5" min="1" max="10" class="form-control">
+                            <small>Number of time lags to consider</small>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-search"></i> Discover Causal Structure
+                    </button>
+                </form>
+            </div>
+
+            <div id="discoveryResults" class="results-section" style="display: none;">
+                <div class="causal-graph-container">
+                    <h3>Causal Graph</h3>
+                    <div id="causalGraph" class="causal-graph"></div>
+                </div>
+
+                <div class="relationships-list">
+                    <h3>Discovered Relationships</h3>
+                    <div id="relationshipsList" class="relationships-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Effect Estimation Tab -->
+        <div id="effectsTab" class="tab-content">
+            <div class="info-banner">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Causal Effect Estimation</strong>
+                    <p>Estimate the causal impact of interventions using DoWhy framework</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2 class="form-title">Effect Estimation Setup</h2>
+                <form id="effectsForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="effectsCategory">Drug Category</label>
+                            <select id="effectsCategory" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="C1">C1 - Anti-inflammatory</option>
+                                <option value="C2">C2 - Anti-inflammatory</option>
+                                <option value="C3">C3 - Analgesics</option>
+                                <option value="C4">C4 - Analgesics</option>
+                                <option value="C5">C5 - Psycholeptics</option>
+                                <option value="C6">C6 - Psycholeptics</option>
+                                <option value="C7">C7 - Respiratory</option>
+                                <option value="C8">C8 - Antihistamines</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="treatment">Treatment Variable</label>
+                            <select id="treatment" class="form-control" required>
+                                <option value="">Select Treatment</option>
+                                <option value="sales_lag1">Previous Week Sales</option>
+                                <option value="week">Week of Year</option>
+                                <option value="year">Year</option>
+                                <option value="trend">Trend</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-calculator"></i> Estimate Causal Effect
+                    </button>
+                </form>
+            </div>
+
+            <div id="effectsResults" class="results-section" style="display: none;">
+                <div class="effect-cards">
+                    <div class="effect-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Average Treatment Effect</h3>
+                        <div class="effect-value" id="ateValue">-</div>
+                    </div>
+                    <div class="effect-card">
+                        <i class="fas fa-balance-scale"></i>
+                        <h3>Effect Size</h3>
+                        <div class="effect-value" id="effectSize">-</div>
+                    </div>
+                    <div class="effect-card">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Confidence</h3>
+                        <div class="effect-value" id="confidence">-</div>
+                    </div>
+                </div>
+
+                <div class="effect-details">
+                    <h3>Estimation Details</h3>
+                    <pre id="effectDetails"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Counterfactual Tab -->
+        <div id="counterfactualTab" class="tab-content">
+            <div class="info-banner">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Counterfactual Analysis</strong>
+                    <p>Simulate "what-if" scenarios by changing variable values</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2 class="form-title">Counterfactual Simulation</h2>
+                <form id="counterfactualForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="cfCategory">Drug Category</label>
+                            <select id="cfCategory" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="C1">C1 - Anti-inflammatory</option>
+                                <option value="C2">C2 - Anti-inflammatory</option>
+                                <option value="C3">C3 - Analgesics</option>
+                                <option value="C4">C4 - Analgesics</option>
+                                <option value="C5">C5 - Psycholeptics</option>
+                                <option value="C6">C6 - Psycholeptics</option>
+                                <option value="C7">C7 - Respiratory</option>
+                                <option value="C8">C8 - Antihistamines</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cfVariable">Variable to Change</label>
+                            <select id="cfVariable" class="form-control" required>
+                                <option value="">Select Variable</option>
+                                <option value="sales_lag1">Previous Week Sales</option>
+                                <option value="trend">Trend</option>
+                                <option value="week">Week of Year</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="changePercent">Change Percentage</label>
+                            <div class="input-with-addon">
+                                <input type="number" id="changePercent" value="20" min="-100" max="100" class="form-control">
+                                <span class="addon">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-flask"></i> Run Counterfactual
+                    </button>
+                </form>
+            </div>
+
+            <div id="counterfactualResults" class="results-section" style="display: none;">
+                <div class="scenario-comparison">
+                    <div class="scenario-card">
+                        <h3>Actual Scenario</h3>
+                        <div class="scenario-value" id="actualValue">-</div>
+                        <p>Current sales prediction</p>
+                    </div>
+                    <div class="scenario-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="scenario-card highlight">
+                        <h3>Counterfactual</h3>
+                        <div class="scenario-value" id="cfValue">-</div>
+                        <p>Predicted with change</p>
+                    </div>
+                    <div class="scenario-diff">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span id="cfDiff">-</span>
+                    </div>
+                </div>
+
+                <div class="cf-insights">
+                    <h3>Insights</h3>
+                    <div id="cfInsights"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complete Analysis Tab -->
+        <div id="completeTab" class="tab-content">
+            <div class="info-banner">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Complete Causal Analysis</strong>
+                    <p>Run all causal analysis methods in one comprehensive workflow</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2 class="form-title">Complete Analysis</h2>
+                <form id="completeForm">
+                    <div class="form-group">
+                        <label for="completeCategory">Drug Category</label>
+                        <select id="completeCategory" class="form-control" required>
+                            <option value="">Select Category</option>
+                            <option value="C1">C1 - Anti-inflammatory</option>
+                            <option value="C2">C2 - Anti-inflammatory</option>
+                            <option value="C3">C3 - Analgesics</option>
+                            <option value="C4">C4 - Analgesics</option>
+                            <option value="C5">C5 - Psycholeptics</option>
+                            <option value="C6">C6 - Psycholeptics</option>
+                            <option value="C7">C7 - Respiratory</option>
+                            <option value="C8">C8 - Antihistamines</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-play-circle"></i> Run Complete Analysis
+                    </button>
+                </form>
+            </div>
+
+            <div id="completeProgress" class="progress-card" style="display: none;">
+                <div class="progress-header">
+                    <h3>Analysis Progress</h3>
+                    <span id="completeStep">Initializing...</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="completeProgressBar"></div>
+                </div>
+                <div class="analysis-steps">
+                    <div class="step-item pending">
+                        <i class="fas fa-search"></i>
+                        <span>Causal Discovery</span>
+                    </div>
+                    <div class="step-item pending">
+                        <i class="fas fa-calculator"></i>
+                        <span>Effect Estimation</span>
+                    </div>
+                    <div class="step-item pending">
+                        <i class="fas fa-flask"></i>
+                        <span>Counterfactuals</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="completeResults" class="results-section" style="display: none;">
+                <h3>Comprehensive Causal Analysis Results</h3>
+                <div class="complete-summary">
+                    <div class="summary-section">
+                        <h4><i class="fas fa-project-diagram"></i> Causal Structure</h4>
+                        <div id="completeCausalGraph"></div>
+                    </div>
+                    <div class="summary-section">
+                        <h4><i class="fas fa-list"></i> Key Effects</h4>
+                        <div id="completeEffects"></div>
+                    </div>
+                    <div class="summary-section">
+                        <h4><i class="fas fa-lightbulb"></i> Recommendations</h4>
+                        <div id="completeRecommendations"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/causal.js') }}"></script>
+</body>
+</html>

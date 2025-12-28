@@ -1,0 +1,13 @@
+{
+  "treatment": "sales_lag1",
+  "outcome": "sales",
+  "confounders": [
+    "month",
+    "quarter",
+    "trend"
+  ],
+  "estimates": {},
+  "placebo_test": null,
+  "identified_estimand": "Estimand type: EstimandType.NONPARAMETRIC_ATE\n\n### Estimand : 1\nEstimand name: backdoor\nEstimand expression:\n      d                                    \n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500(E[sales|trend,month,quarter])\nd[sales_lag1]                              \nEstimand assumption 1, Unconfoundedness: If U\u2192{sales_lag1} and U\u2192sales then P(sales|sales_lag1,trend,month,quarter,U) = P(sales|sales_lag1,trend,month,quarter)\n\n### Estimand : 2\nEstimand name: iv\nNo such variable(s) found!\n\n### Estimand : 3\nEstimand name: frontdoor\nNo such variable(s) found!\n\n### Estimand : 4\nEstimand name: general_adjustment\nEstimand expression:\n      d                                    \n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500(E[sales|trend,month,quarter])\nd[sales_lag1]                              \nEstimand assumption 1, Unconfoundedness: If U\u2192{sales_lag1} and U\u2192sales then P(sales|sales_lag1,trend,month,quarter,U) = P(sales|sales_lag1,trend,month,quarter)\n",
+  "timestamp": "2025-12-03T15:16:20.753980"
+}

@@ -1,4 +1,6 @@
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend to avoid threading issues
 import matplotlib.pyplot as plt
 import os
 from datetime import datetime, timedelta
@@ -28,11 +30,12 @@ def forecast_sales(category, date_str, model_type='ensemble', base_path=''):
             closest_date = df.index[df.index <= input_date].max()
             if pd.isna(closest_date):
                 closest_date = df.index.min()
-            forecast_value = df.loc[closest_date, category]
+            forecast_value = float(df.loc[closest_date, category])
             model_used = "Historical Data"
         else:
             # Future date - use ML model
             forecast_value, model_used = get_model_forecast(category, days_ahead, model_type, base_path)
+            forecast_value = float(forecast_value)
 
             # Use last available date as reference
             closest_date = last_date
@@ -118,7 +121,7 @@ def get_model_forecast(category, days_ahead, model_type, base_path=''):
 def get_sarimax_forecast(category, days_ahead, base_path=''):
     """Get SARIMAX forecast"""
     try:
-        from models.sarimax_model import predict_sarimax, fit_sarimax
+        from src.models.sarimax_model import predict_sarimax, fit_sarimax
         csv_path = os.path.join(base_path, f'{category}.csv') if base_path else f'{category}.csv'
         df = pd.read_csv(csv_path, index_col=0, parse_dates=True)
         order = (1, 0, 0)
@@ -132,9 +135,12 @@ def get_sarimax_forecast(category, days_ahead, base_path=''):
 def get_xgboost_forecast(category, days_ahead, base_path=''):
     """Get XGBoost forecast"""
     try:
-        from utils.xgb_forecast import forecast_xgboost
-        model_dir = os.path.join(base_path, 'models_xgb') if base_path else 'models_xgb'
+        from src.utils.xgb_forecast import forecast_xgboost
+        model_dir = os.path.join(base_path, 'models_xgb', '') if base_path else './models_xgb/'
         result = forecast_xgboost(category, n_lags=5, n_steps=days_ahead, base_path=base_path, model_dir=model_dir)
+        # Handle list or array results
+        if isinstance(result, (list, np.ndarray)):
+            result = result[-1] if len(result) > 0 else result[0]
         return float(result), "XGBoost"
     except:
         raise
@@ -142,8 +148,8 @@ def get_xgboost_forecast(category, days_ahead, base_path=''):
 def get_transformer_forecast(category, days_ahead, base_path=''):
     """Get Transformer forecast"""
     try:
-        from models.transformer_model import forecast_transformer
-        model_dir = os.path.join(base_path, 'models_transformer') if base_path else 'models_transformer'
+        from src.models.transformer_model import forecast_transformer
+        model_dir = os.path.join(base_path, 'models_transformer', '') if base_path else './models_transformer/'
         result = forecast_transformer(category, seq_length=10, n_steps=days_ahead, base_path=base_path, model_dir=model_dir)
         return float(result), "Transformer"
     except:
@@ -152,8 +158,8 @@ def get_transformer_forecast(category, days_ahead, base_path=''):
 def get_gru_forecast(category, days_ahead, base_path=''):
     """Get GRU forecast"""
     try:
-        from models.gru_model import forecast_gru
-        model_dir = os.path.join(base_path, 'models_gru') if base_path else 'models_gru'
+        from src.models.gru_model import forecast_gru
+        model_dir = os.path.join(base_path, 'models_gru', '') if base_path else './models_gru/'
         result = forecast_gru(category, seq_length=10, n_steps=days_ahead, base_path=base_path, model_dir=model_dir)
         return float(result), "GRU"
     except:
@@ -162,8 +168,8 @@ def get_gru_forecast(category, days_ahead, base_path=''):
 def get_lstm_forecast(category, days_ahead, base_path=''):
     """Get LSTM forecast"""
     try:
-        from models.lstm_model import forecast_lstm
-        model_dir = os.path.join(base_path, 'models_lstm') if base_path else 'models_lstm'
+        from src.models.lstm_model import forecast_lstm
+        model_dir = os.path.join(base_path, 'models_lstm', '') if base_path else './models_lstm/'
         result = forecast_lstm(category, seq_length=10, n_steps=days_ahead, base_path=base_path, model_dir=model_dir)
         return float(result), "LSTM"
     except:
@@ -172,9 +178,12 @@ def get_lstm_forecast(category, days_ahead, base_path=''):
 def get_lightgbm_forecast(category, days_ahead, base_path=''):
     """Get LightGBM forecast"""
     try:
-        from models.lightgbm_model import forecast_lightgbm
-        model_dir = os.path.join(base_path, 'models_lightgbm') if base_path else 'models_lightgbm'
+        from src.models.lightgbm_model import forecast_lightgbm
+        model_dir = os.path.join(base_path, 'models_lightgbm', '') if base_path else './models_lightgbm/'
         result = forecast_lightgbm(category, n_lags=5, n_steps=days_ahead, base_path=base_path, model_dir=model_dir)
+        # Handle list or array results
+        if isinstance(result, (list, np.ndarray)):
+            result = result[-1] if len(result) > 0 else result[0]
         return float(result), "LightGBM"
     except:
         raise
@@ -182,9 +191,12 @@ def get_lightgbm_forecast(category, days_ahead, base_path=''):
 def get_prophet_forecast(category, days_ahead, base_path=''):
     """Get Prophet forecast"""
     try:
-        from models.prophet_model import forecast_prophet
-        model_dir = os.path.join(base_path, 'models_prophet') if base_path else 'models_prophet'
+        from src.models.prophet_model import forecast_prophet
+        model_dir = os.path.join(base_path, 'models_prophet', '') if base_path else './models_prophet/'
         result = forecast_prophet(category, periods=days_ahead, base_path=base_path, model_dir=model_dir)
+        # Handle list or array results
+        if isinstance(result, (list, np.ndarray)):
+            result = result[-1] if len(result) > 0 else result[0]
         return float(result), "Prophet"
     except:
         raise
@@ -208,7 +220,7 @@ def get_ensemble_forecast(category, days_ahead, base_path=''):
             # Update paths in the model calls
             try:
                 # SARIMAX
-                from models.sarimax_model import predict_sarimax, fit_sarimax
+                from src.models.sarimax_model import predict_sarimax, fit_sarimax
                 csv_path = os.path.join(base_path, f'{cat}.csv') if base_path else f'{cat}.csv'
                 df = pd.read_csv(csv_path, parse_dates=['datum'], index_col='datum')
                 order = (1, 0, 0)
@@ -220,12 +232,12 @@ def get_ensemble_forecast(category, days_ahead, base_path=''):
 
             # For other models, try with corrected paths
             model_configs = [
-                ('xgboost', 'utils.xgb_forecast', 'forecast_xgboost', {'n_lags': 5, 'n_steps': n_steps}),
-                ('transformer', 'models.transformer_model', 'forecast_transformer', {'seq_length': 10, 'n_steps': n_steps}),
-                ('gru', 'models.gru_model', 'forecast_gru', {'seq_length': 10, 'n_steps': n_steps}),
-                ('lstm', 'models.lstm_model', 'forecast_lstm', {'seq_length': 10, 'n_steps': n_steps}),
-                ('lightgbm', 'models.lightgbm_model', 'forecast_lightgbm', {'n_lags': 5, 'n_steps': n_steps}),
-                ('prophet', 'models.prophet_model', 'forecast_prophet', {'periods': n_steps})
+                ('xgboost', 'src.utils.xgb_forecast', 'forecast_xgboost', {'n_lags': 5, 'n_steps': n_steps}),
+                ('transformer', 'src.models.transformer_model', 'forecast_transformer', {'seq_length': 10, 'n_steps': n_steps}),
+                ('gru', 'src.models.gru_model', 'forecast_gru', {'seq_length': 10, 'n_steps': n_steps}),
+                ('lstm', 'src.models.lstm_model', 'forecast_lstm', {'seq_length': 10, 'n_steps': n_steps}),
+                ('lightgbm', 'src.models.lightgbm_model', 'forecast_lightgbm', {'n_lags': 5, 'n_steps': n_steps}),
+                ('prophet', 'src.models.prophet_model', 'forecast_prophet', {'periods': n_steps})
             ]
             
             for model_name, module_name, func_name, kwargs in model_configs:
@@ -233,7 +245,7 @@ def get_ensemble_forecast(category, days_ahead, base_path=''):
                     module = __import__(module_name, fromlist=[func_name])
                     func = getattr(module, func_name)
                     model_dir_name = f'models_{model_name}'
-                    model_dir = os.path.join(base_path, model_dir_name) if base_path else model_dir_name
+                    model_dir = os.path.join(base_path, model_dir_name, '') if base_path else f'./{model_dir_name}/'
                     result = func(cat, base_path=base_path, model_dir=model_dir, **kwargs)
                     predictions[model_name] = [result] * n_steps if not isinstance(result, (list, np.ndarray)) else result
                 except Exception as e:
@@ -245,11 +257,23 @@ def get_ensemble_forecast(category, days_ahead, base_path=''):
         
         predictions = ensemble.get_model_predictions(category, n_steps=days_ahead)
 
-        # Simple weighted average
-        weights = {model: 1.0 / len(ensemble.models) for model in ensemble.models}
-        ensemble_pred = ensemble.weighted_average_ensemble(predictions, weights)
-
-        return float(ensemble_pred[-1]), "Ensemble (Weighted Average)"
+        # Convert all predictions to single values and calculate simple average
+        valid_predictions = []
+        for model_name, pred in predictions.items():
+            try:
+                if isinstance(pred, (list, np.ndarray)):
+                    if len(pred) > 0:
+                        valid_predictions.append(float(pred[-1]))
+                else:
+                    valid_predictions.append(float(pred))
+            except:
+                pass
+        
+        if len(valid_predictions) > 0:
+            ensemble_value = np.mean(valid_predictions)
+            return float(ensemble_value), "Ensemble (Weighted Average)"
+        else:
+            raise Exception("No valid predictions from models")
     except Exception as e:
         print(f"Ensemble forecast failed: {e}")
         # Fallback to simple average

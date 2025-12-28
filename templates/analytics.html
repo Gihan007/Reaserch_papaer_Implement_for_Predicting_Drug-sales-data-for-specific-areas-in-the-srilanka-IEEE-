@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - PharmaPredictAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>PharmaPredictAI</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/forecast" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Forecasting</span>
+                </a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-brain"></i>
+                        <span>AI Models</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="/meta-learning" class="dropdown-item">
+                            <i class="fas fa-brain"></i>
+                            <span>Meta Learning</span>
+                        </a>
+                        <a href="/advanced" class="dropdown-item">
+                            <i class="fas fa-robot"></i>
+                            <span>Advanced AI</span>
+                        </a>
+                        <a href="/causal" class="dropdown-item">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Causal Analysis</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="/analytics" class="nav-link active">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="notificationBtn" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-dropdown">
+                    <button class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="User">
+                        <span class="user-name">Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">
+                    <i class="fas fa-chart-bar"></i> Analytics Dashboard
+                </h1>
+                <p class="page-subtitle">Comprehensive insights and performance metrics</p>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <select class="form-control" style="width: auto;">
+                    <option>Last 7 Days</option>
+                    <option>Last 30 Days</option>
+                    <option>Last 90 Days</option>
+                    <option>All Time</option>
+                </select>
+                <button class="btn btn-primary">
+                    <i class="fas fa-download"></i> Export Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Overview Stats -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-number">15,847</h3>
+                    <p class="stat-title">Total Predictions</p>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 23.5% from last month
+                    </span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-number">96.2%</h3>
+                    <p class="stat-title">Average Accuracy</p>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 1.2% improvement
+                    </span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-number">118ms</h3>
+                    <p class="stat-title">Avg Response Time</p>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-down"></i> 24ms faster
+                    </span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-number">342</h3>
+                    <p class="stat-title">Active Users</p>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 45 new this week
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Row -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <!-- Predictions Over Time -->
+            <div class="form-card">
+                <h3 style="margin-bottom: 1.5rem;">Predictions Over Time</h3>
+                <div style="height: 300px;">
+                    <canvas id="predictionsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Model Performance -->
+            <div class="form-card">
+                <h3 style="margin-bottom: 1.5rem;">Model Performance Comparison</h3>
+                <div style="height: 300px;">
+                    <canvas id="modelPerformanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Performance -->
+        <section class="form-card" style="margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1.5rem;">Category Performance Metrics</h3>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f8f9fa; text-align: left;">
+                            <th style="padding: 1rem; font-weight: 600;">Category</th>
+                            <th style="padding: 1rem; font-weight: 600;">Predictions</th>
+                            <th style="padding: 1rem; font-weight: 600;">Avg MAE</th>
+                            <th style="padding: 1rem; font-weight: 600;">Avg RMSE</th>
+                            <th style="padding: 1rem; font-weight: 600;">Accuracy</th>
+                            <th style="padding: 1rem; font-weight: 600;">Trend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #e9ecef;">
+                            <td style="padding: 1rem;"><strong>C1 - Anti-inflammatory</strong></td>
+                            <td style="padding: 1rem;">3,245</td>
+                            <td style="padding: 1rem;">2.34</td>
+                            <td style="padding: 1rem;">3.12</td>
+                            <td style="padding: 1rem;">
+                                <span style="background: #d4edda; color: #155724; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; font-weight: 600;">97.2%</span>
+                            </td>
+                            <td style="padding: 1rem; color: #28a745;"><i class="fas fa-arrow-up"></i> +2.1%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e9ecef;">
+                            <td style="padding: 1rem;"><strong>C2 - Anti-inflammatory</strong></td>
+                            <td style="padding: 1rem;">2,891</td>
+                            <td style="padding: 1rem;">2.45</td>
+                            <td style="padding: 1rem;">3.28</td>
+                            <td style="padding: 1rem;">
+                                <span style="background: #d4edda; color: #155724; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; font-weight: 600;">96.8%</span>
+                            </td>
+                            <td style="padding: 1rem; color: #28a745;"><i class="fas fa-arrow-up"></i> +1.5%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e9ecef;">
+                            <td style="padding: 1rem;"><strong>C3 - Analgesics</strong></td>
+                            <td style="padding: 1rem;">2,567</td>
+                            <td style="padding: 1rem;">2.67</td>
+                            <td style="padding: 1rem;">3.45</td>
+                            <td style="padding: 1rem;">
+                                <span style="background: #d4edda; color: #155724; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; font-weight: 600;">95.3%</span>
+                            </td>
+                            <td style="padding: 1rem; color: #28a745;"><i class="fas fa-arrow-up"></i> +0.8%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e9ecef;">
+                            <td style="padding: 1rem;"><strong>C4 - Analgesics</strong></td>
+                            <td style="padding: 1rem;">2,234</td>
+                            <td style="padding: 1rem;">2.89</td>
+                            <td style="padding: 1rem;">3.67</td>
+                            <td style="padding: 1rem;">
+                                <span style="background: #d4edda; color: #155724; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; font-weight: 600;">94.1%</span>
+                            </td>
+                            <td style="padding: 1rem; color: #dc3545;"><i class="fas fa-arrow-down"></i> -0.3%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e9ecef;">
+                            <td style="padding: 1rem;"><strong>C5 - Psycholeptics</strong></td>
+                            <td style="padding: 1rem;">1,892</td>
+                            <td style="padding: 1rem;">3.12</td>
+                            <td style="padding: 1rem;">4.01</td>
+                            <td style="padding: 1rem;">
+                                <span style="background: #fff3cd; color: #856404; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; font-weight: 600;">92.5%</span>
+                            </td>
+                            <td style="padding: 1rem; color: #28a745;"><i class="fas fa-arrow-up"></i> +1.2%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Model Usage -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-card">
+                <h3 style="margin-bottom: 1.5rem;">Model Usage Distribution</h3>
+                <div style="height: 300px;">
+                    <canvas id="modelUsageChart"></canvas>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h3 style="margin-bottom: 1.5rem;">System Health</h3>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>API Uptime</span>
+                            <strong>99.9%</strong>
+                        </div>
+                        <div style="height: 8px; background: #e9ecef; border-radius: 1rem; overflow: hidden;">
+                            <div style="width: 99.9%; height: 100%; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Average CPU Usage</span>
+                            <strong>42%</strong>
+                        </div>
+                        <div style="height: 8px; background: #e9ecef; border-radius: 1rem; overflow: hidden;">
+                            <div style="width: 42%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Memory Usage</span>
+                            <strong>68%</strong>
+                        </div>
+                        <div style="height: 8px; background: #e9ecef; border-radius: 1rem; overflow: hidden;">
+                            <div style="width: 68%; height: 100%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Model Cache Hit Rate</span>
+                            <strong>87%</strong>
+                        </div>
+                        <div style="height: 8px; background: #e9ecef; border-radius: 1rem; overflow: hidden;">
+                            <div style="width: 87%; height: 100%; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Predictions Over Time Chart
+        const predictionsCtx = document.getElementById('predictionsChart');
+        new Chart(predictionsCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'],
+                datasets: [{
+                    label: 'Predictions',
+                    data: [1850, 2100, 2450, 2200, 2650, 2800, 3100],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Model Performance Chart
+        const performanceCtx = document.getElementById('modelPerformanceChart');
+        new Chart(performanceCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Ensemble', 'LSTM', 'GRU', 'Transformer', 'XGBoost'],
+                datasets: [{
+                    label: 'MAE',
+                    data: [2.34, 2.89, 2.95, 2.67, 3.12],
+                    backgroundColor: ['#667eea', '#f5576c', '#38f9d7', '#fa709a', '#fee140']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Model Usage Chart
+        const usageCtx = document.getElementById('modelUsageChart');
+        new Chart(usageCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Ensemble', 'LSTM', 'Transformer', 'XGBoost', 'Others'],
+                datasets: [{
+                    data: [35, 25, 20, 12, 8],
+                    backgroundColor: ['#667eea', '#f5576c', '#38f9d7', '#fa709a', '#fee140']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
+</body>
+</html>

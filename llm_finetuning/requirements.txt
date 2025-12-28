@@ -1,0 +1,22 @@
+# LLM Fine-Tuning Requirements
+# Install: pip install -r llm_finetuning/requirements.txt
+
+# Core deep learning
+torch>=2.1.0
+transformers>=4.35.0
+accelerate>=0.24.0
+peft>=0.6.0
+bitsandbytes>=0.41.0
+
+# Dataset handling
+datasets>=2.14.0
+
+# Training monitoring (optional)
+# wandb>=0.16.0
+
+# Text processing
+sentencepiece>=0.1.99
+
+# Data manipulation
+pandas>=2.0.0
+numpy>=1.24.0

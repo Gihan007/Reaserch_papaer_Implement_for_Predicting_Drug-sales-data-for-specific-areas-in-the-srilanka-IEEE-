@@ -33,7 +33,7 @@
       "correlation": 0.1202895403248427,
       "strength": "weak",
       "direction": "positive",
-      "lag": -4
+      "lag": 3
     },
     {
       "variable": "sales_lag1",
@@ -47,28 +47,28 @@
       "correlation": 0.057997862828662775,
       "strength": "weak",
       "direction": "positive",
-      "lag": 4
+      "lag": 2
     },
     {
       "variable": "cyclical_sin",
       "correlation": -0.05710608383046047,
       "strength": "weak",
       "direction": "negative",
-      "lag": -5
+      "lag": -3
     },
     {
       "variable": "cyclical_cos",
       "correlation": -0.048212384637272274,
       "strength": "weak",
       "direction": "negative",
-      "lag": 5
+      "lag": 3
     },
     {
       "variable": "is_holiday_season",
       "correlation": -0.044221643858782814,
       "strength": "weak",
       "direction": "negative",
-      "lag": 4
+      "lag": 3
     }
   ],
   "granger_causality": [
@@ -77,84 +77,84 @@
       "target_variable": "sales",
       "granger_causal": "True",
       "min_p_value": 1.4608414667317976e-06,
-      "tested_lags": 5
+      "tested_lags": 3
     },
     {
       "cause_variable": "month",
       "target_variable": "sales",
-      "granger_causal": "True",
-      "min_p_value": 0.02042220009436809,
-      "tested_lags": 5
+      "granger_causal": "False",
+      "min_p_value": 0.055127261477100474,
+      "tested_lags": 3
     },
     {
       "cause_variable": "quarter",
       "target_variable": "sales",
-      "granger_causal": "True",
-      "min_p_value": 0.02648620430465422,
-      "tested_lags": 5
+      "granger_causal": "False",
+      "min_p_value": 0.1590818484388448,
+      "tested_lags": 3
     },
     {
       "cause_variable": "year",
       "target_variable": "sales",
       "granger_causal": "True",
       "min_p_value": 1.4180459529018354e-06,
-      "tested_lags": 5
+      "tested_lags": 3
     },
     {
       "cause_variable": "sales_lag1",
       "target_variable": "sales",
       "granger_causal": "True",
       "min_p_value": 0.0003302305081489414,
-      "tested_lags": 5
+      "tested_lags": 3
     },
     {
       "cause_variable": "sales_lag4",
       "target_variable": "sales",
       "granger_causal": "True",
-      "min_p_value": 8.857408094630301e-05,
-      "tested_lags": 5
+      "min_p_value": 0.0003199810318807114,
+      "tested_lags": 3
     },
     {
       "cause_variable": "sales_lag12",
       "target_variable": "sales",
-      "granger_causal": "True",
-      "min_p_value": 0.02410454241097459,
-      "tested_lags": 5
+      "granger_causal": "False",
+      "min_p_value": 0.060193095109193365,
+      "tested_lags": 3
     },
     {
       "cause_variable": "is_holiday_season",
       "target_variable": "sales",
       "granger_causal": "False",
       "min_p_value": 0.7260902058727323,
-      "tested_lags": 5
+      "tested_lags": 3
     },
     {
       "cause_variable": "is_rainy_season",
       "target_variable": "sales",
       "granger_causal": "False",
       "min_p_value": 0.2535288624300418,
-      "tested_lags": 5
+      "tested_lags": 3
     },
     {
       "cause_variable": "trend",
       "target_variable": "sales",
       "granger_causal": "True",
       "min_p_value": 1.4608414667317976e-06,
-      "tested_lags": 5
+      "tested_lags": 3
     },
     {
       "cause_variable": "cyclical_sin",
       "target_variable": "sales",
       "granger_causal": "False",
       "min_p_value": 0.3208698376377168,
-      "tested_lags": 5
+      "tested_lags": 3
     },
     {
       "cause_variable": "cyclical_cos",
       "target_variable": "sales",
       "granger_causal": "False",
       "min_p_value": 0.2567482544147734,
-      "tested_lags": 5
+      "tested_lags": 3
     }
   ],
   "correlation_matrix": {
@@ -172,5 +172,5 @@
     "cyclical_cos": -0.048212384637272274
   },
   "data_points": 505,
-  "timestamp": "2025-11-25T16:08:51.757912"
+  "timestamp": "2025-11-26T23:20:41.751588"
 }

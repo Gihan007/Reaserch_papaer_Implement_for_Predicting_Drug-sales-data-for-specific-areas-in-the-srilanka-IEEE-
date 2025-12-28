@@ -1,0 +1,52 @@
+@startuml Meta-Learning Train Endpoint Flow
+title /api/meta-learning/train (POST) - Input to Output Flow
+
+actor Client
+participant "Flask App" as App
+participant "MetaLearningSystem" as MetaSys
+database "Model Storage" as Storage
+
+== Request Phase ==
+Client -> App: POST /api/meta-learning/train
+note right: JSON payload: {"categories": ["C1", "C2", "C3", "C4"]}
+
+== Processing Phase ==
+App -> App: Parse JSON request
+App -> App: Extract categories (default: C1-C4)
+App -> MetaSys: get_meta_system() [lazy load]
+MetaSys --> App: MetaLearningSystem instance
+
+App -> MetaSys: train_maml(categories, n_epochs=5)
+note right: Train MAML across specified categories
+
+MetaSys -> Storage: Save trained MAML model
+Storage --> MetaSys: Model saved
+
+MetaSys --> App: Training completed
+
+== Response Phase ==
+App -> App: Prepare success response
+App -> Client: JSON response
+note left: {
+  "status": "success",
+  "message": "Meta-learning model trained successfully",
+  "categories_used": ["C1", "C2", "C3", "C4"]
+}
+
+== Error Handling ==
+alt Meta-learning system unavailable
+    App -> Client: Error response
+    note left: {
+      "status": "error",
+      "message": "Meta-learning system not available..."
+    }
+end
+
+alt Training fails
+    App -> Client: Error response
+    note left: {
+      "status": "error",
+      "message": "Training failed: [error details]"
+    }
+end
+@enduml

@@ -1,0 +1,112 @@
+{
+  "total_categories": 3,
+  "average_best_loss": 0.07348110914851229,
+  "average_mae": 0.25008903443813324,
+  "total_architectures_evaluated": 180,
+  "results": [
+    {
+      "category": "C1",
+      "best_architecture": {
+        "num_layers": 3,
+        "hidden_dims": [
+          256,
+          128,
+          64
+        ],
+        "dropout_rates": [
+          0.2,
+          0.1,
+          0.3
+        ],
+        "activation": "relu",
+        "learning_rate": 0.001,
+        "batch_size": 32,
+        "seq_length": 7
+      },
+      "best_metrics": {
+        "val_loss": 0.06814939714968204,
+        "mae": 0.25003179907798767,
+        "rmse": 0.2958513354590922,
+        "epochs_trained": 11
+      },
+      "fitness_history": [
+        0.06332636531442404,
+        0.06814939714968204
+      ],
+      "total_architectures_evaluated": 60,
+      "search_time": 1764059304.9020677
+    },
+    {
+      "category": "C2",
+      "best_architecture": {
+        "num_layers": 5,
+        "hidden_dims": [
+          128,
+          128,
+          128,
+          128,
+          32
+        ],
+        "dropout_rates": [
+          0.4,
+          0.0,
+          0.1,
+          0.0,
+          0.2
+        ],
+        "activation": "leaky_relu",
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "seq_length": 21
+      },
+      "best_metrics": {
+        "val_loss": 0.0780610553920269,
+        "mae": 0.24953867495059967,
+        "rmse": 0.2897354232011246,
+        "epochs_trained": 12
+      },
+      "fitness_history": [
+        0.0754002183675766,
+        0.0780610553920269
+      ],
+      "total_architectures_evaluated": 60,
+      "search_time": 1764059404.1321635
+    },
+    {
+      "category": "C3",
+      "best_architecture": {
+        "num_layers": 5,
+        "hidden_dims": [
+          256,
+          128,
+          32,
+          128,
+          256
+        ],
+        "dropout_rates": [
+          0.0,
+          0.2,
+          0.2,
+          0.2,
+          0.4
+        ],
+        "activation": "elu",
+        "learning_rate": 0.0001,
+        "batch_size": 32,
+        "seq_length": 7
+      },
+      "best_metrics": {
+        "val_loss": 0.0742328749038279,
+        "mae": 0.2506966292858124,
+        "rmse": 0.30719653235629096,
+        "epochs_trained": 12
+      },
+      "fitness_history": [
+        0.07420102320611477,
+        0.0742328749038279
+      ],
+      "total_architectures_evaluated": 60,
+      "search_time": 1764059513.692132
+    }
+  ]
+}

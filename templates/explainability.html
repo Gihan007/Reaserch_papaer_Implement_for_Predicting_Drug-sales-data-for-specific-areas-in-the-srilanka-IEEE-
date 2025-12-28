@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Explainability - SHAP Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .explainability-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .form-group select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .analyze-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .result-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .result-card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .feature-importance-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .feature-name {
+            flex: 1;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .feature-value {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-right: 15px;
+        }
+
+        .feature-bar {
+            flex: 2;
+            height: 25px;
+            background: linear-gradient(90deg, #3498db 0%, #2ecc71 100%);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .interpretation-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .interpretation-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .interpretation-desc {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .interpretation-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .badge-temporal { background: #3498db20; color: #3498db; }
+        .badge-seasonal { background: #e67e2220; color: #e67e22; }
+        .badge-cyclical { background: #9b59b620; color: #9b59b6; }
+        .badge-trend { background: #2ecc7120; color: #2ecc71; }
+
+        .plot-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .plot-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #c33;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: #555;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .two-column-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .two-column-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>🔬 Drug Sales Forecasting</h2>
+            </div>
+            <div class="nav-links">
+                <a href="/">Dashboard</a>
+                <a href="/forecast">Forecast</a>
+                <a href="/analytics">Analytics</a>
+                <a href="/explainability" class="active">Explainability</a>
+                <a href="/meta-learning">Meta-Learning</a>
+                <a href="/advanced">Advanced AI</a>
+                <a href="/causal">Causal Analysis</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="explainability-container">
+        <h1 style="color: #2c3e50; margin-bottom: 10px;">🧠 Model Explainability - SHAP Analysis</h1>
+        <p style="color: #7f8c8d; margin-bottom: 30px;">
+            Understand how machine learning models make predictions using SHAP (SHapley Additive exPlanations)
+        </p>
+
+        <div class="info-box">
+            <h4>📊 What is SHAP?</h4>
+            <p><strong>SHAP values</strong> explain individual predictions by showing how each feature contributes to the model's output.</p>
+            <p>• <strong>Positive SHAP values</strong> push the prediction higher</p>
+            <p>• <strong>Negative SHAP values</strong> push the prediction lower</p>
+            <p>• <strong>Feature importance</strong> is calculated from average absolute SHAP values across all predictions</p>
+        </div>
+
+        <div class="control-panel">
+            <div class="control-row">
+                <div class="form-group">
+                    <label for="category">Drug Category</label>
+                    <select id="category">
+                        <option value="C1">C1 - M01AB (Anti-inflammatory Acetic Acid)</option>
+                        <option value="C2">C2 - M01AE (Anti-inflammatory Propionic Acid)</option>
+                        <option value="C3">C3 - N02BA (Analgesics, Salicylic Acid)</option>
+                        <option value="C4">C4 - N02BE (Analgesics, Pyrazolones)</option>
+                        <option value="C5">C5 - N05B (Anxiolytics)</option>
+                        <option value="C6">C6 - N05C (Hypnotics and Sedatives)</option>
+                        <option value="C7">C7 - R03 (Drugs for Obstructive Airway)</option>
+                        <option value="C8">C8 - R06 (Antihistamines)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modelType">Model Type</label>
+                    <select id="modelType">
+                        <option value="xgboost">XGBoost</option>
+                        <option value="lightgbm">LightGBM</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="justify-content: flex-end;">
+                    <label>&nbsp;</label>
+                    <button class="analyze-btn" onclick="analyzeExplainability()">
+                        🔍 Analyze Model
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsContainer"></div>
+    </div>
+
+    <script>
+        async function analyzeExplainability() {
+            const category = document.getElementById('category').value;
+            const modelType = document.getElementById('modelType').value;
+            const resultsContainer = document.getElementById('resultsContainer');
+            const analyzeBtn = document.querySelector('.analyze-btn');
+
+            // Disable button and show loading
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = '⏳ Analyzing...';
+
+            resultsContainer.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Generating SHAP explanations... This may take 30-60 seconds.</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/api/explainability', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        category: category,
+                        model_type: modelType
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    displayResults(data.results);
+                } else {
+                    showError(data.error);
+                }
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = '🔍 Analyze Model';
+            }
+        }
+
+        function displayResults(results) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            // Feature importance
+            const featureImportanceHTML = generateFeatureImportanceHTML(results.feature_importance);
+            
+            // Interpretations
+            const interpretationsHTML = generateInterpretationsHTML(results.interpretation);
+            
+            // Plots
+            const plotsHTML = generatePlotsHTML(results);
+
+            resultsContainer.innerHTML = `
+                <div class="two-column-grid">
+                    <div class="result-card">
+                        <h3>📊 Feature Importance Rankings</h3>
+                        ${featureImportanceHTML}
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>💡 Feature Interpretations</h3>
+                        ${interpretationsHTML}
+                    </div>
+                </div>
+
+                ${plotsHTML}
+
+                <div class="result-card">
+                    <h3>📝 Summary</h3>
+                    <p style="color: #555; line-height: 1.8;">
+                        <strong>Category:</strong> ${results.category} | 
+                        <strong>Model:</strong> ${results.model_type.toUpperCase()}
+                    </p>
+                    <p style="color: #555; line-height: 1.8;">
+                        The SHAP analysis reveals which features drive predictions for pharmaceutical sales. 
+                        Features with higher importance values have stronger influence on the model's decisions.
+                        This transparency helps validate model behavior and build trust in AI predictions.
+                    </p>
+                </div>
+            `;
+        }
+
+        function generateFeatureImportanceHTML(importance) {
+            if (!importance) return '<p>No data available</p>';
+            
+            const entries = Object.entries(importance);
+            const maxValue = Math.max(...entries.map(([_, v]) => v));
+            
+            let html = '<ul class="feature-importance-list">';
+            
+            entries.slice(0, 10).forEach(([feature, value], index) => {
+                const width = (value / maxValue) * 100;
+                const displayValue = value.toFixed(4);
+                
+                html += `
+                    <li class="feature-item">
+                        <span class="feature-name">${index + 1}. ${formatFeatureName(feature)}</span>
+                        <span class="feature-value">${displayValue}</span>
+                        <div class="feature-bar" style="width: ${width}%"></div>
+                    </li>
+                `;
+            });
+            
+            html += '</ul>';
+            return html;
+        }
+
+        function generateInterpretationsHTML(interpretations) {
+            if (!interpretations || interpretations.length === 0) {
+                return '<p>No interpretations available</p>';
+            }
+            
+            let html = '';
+            
+            interpretations.forEach(interp => {
+                html += `
+                    <div class="interpretation-card">
+                        <div class="interpretation-title">${formatFeatureName(interp.feature)}</div>
+                        <div class="interpretation-desc">${interp.description}</div>
+                        <span class="interpretation-badge badge-${interp.type}">${interp.type}</span>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+
+        function generatePlotsHTML(results) {
+            let html = '';
+            
+            if (results.summary_plot) {
+                html += `
+                    <div class="result-card">
+                        <h3>📈 SHAP Summary Plot</h3>
+                        <p style="color: #666; margin-bottom: 15px;">
+                            Shows the impact of each feature on model predictions. 
+                            Each dot represents a sample, colored by feature value (red=high, blue=low).
+                        </p>
+                        <div class="plot-container">
+                            <img src="/static/images/shap/${results.summary_plot}" alt="SHAP Summary Plot">
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (results.waterfall_plot) {
+                html += `
+                    <div class="result-card">
+                        <h3>🌊 SHAP Waterfall Plot</h3>
+                        <p style="color: #666; margin-bottom: 15px;">
+                            Explains a single prediction by showing how each feature pushes the prediction 
+                            higher (red) or lower (blue) from the base value.
+                        </p>
+                        <div class="plot-container">
+                            <img src="/static/images/shap/${results.waterfall_plot}" alt="SHAP Waterfall Plot">
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return html;
+        }
+
+        function formatFeatureName(name) {
+            const nameMap = {
+                'sales_lag_1': 'Previous Period Sales',
+                'sales_lag_2': 'Sales 2 Periods Ago',
+                'sales_lag_3': 'Sales 3 Periods Ago',
+                'sales_lag_4': 'Sales 4 Periods Ago',
+                'sales_lag_5': 'Sales 5 Periods Ago',
+                'week': 'Week of Year',
+                'month': 'Month',
+                'year': 'Year',
+                'day_of_week': 'Day of Week',
+                'trend': 'Long-term Trend'
+            };
+            
+            return nameMap[name] || name;
+        }
+
+        function showError(message) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.innerHTML = `
+                <div class="error-message">
+                    <strong>⚠️ Error:</strong> ${message}
+                    <p style="margin-top: 10px;">
+                        Make sure the selected model exists and training data is available.
+                    </p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

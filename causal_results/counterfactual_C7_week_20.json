@@ -1,0 +1,12 @@
+{
+  "intervention_variable": "week",
+  "intervention_value": 316.8,
+  "change_percent": 20,
+  "outcome_variable": "sales",
+  "actual_mean": 50.28596485150495,
+  "counterfactual_mean": 50.536641215339706,
+  "effect_size": 0.25067636383475644,
+  "percent_change": 0.49850164867077074,
+  "model_score": 0.3631173204930739,
+  "timestamp": "2025-12-03T15:16:54.569772"
+}

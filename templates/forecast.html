@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forecasting - PharmaPredictAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>PharmaPredictAI</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/forecast" class="nav-link active">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Forecasting</span>
+                </a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-brain"></i>
+                        <span>AI Models</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="/meta-learning" class="dropdown-item">
+                            <i class="fas fa-brain"></i>
+                            <span>Meta Learning</span>
+                        </a>
+                        <a href="/advanced" class="dropdown-item">
+                            <i class="fas fa-robot"></i>
+                            <span>Advanced AI</span>
+                        </a>
+                        <a href="/causal" class="dropdown-item">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Causal Analysis</span>
+                        </a>
+                        <a href="/explainability" class="dropdown-item">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Explainability</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="/analytics" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="notificationBtn" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-dropdown">
+                    <button class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="User">
+                        <span class="user-name">Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content forecast-page">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">
+                    <i class="fas fa-chart-line"></i> Drug Sales Forecasting
+                </h1>
+                <p class="page-subtitle">Advanced multi-model prediction with uncertainty quantification</p>
+            </div>
+            <button class="btn btn-primary" id="exportBtn">
+                <i class="fas fa-download"></i> Export Results
+            </button>
+        </div>
+
+        <!-- Forecasting Form -->
+        <section class="forecast-form-section">
+            <div class="form-card">
+                <h2 class="form-title">Configure Prediction</h2>
+                <form id="forecastForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="category">Drug Category</label>
+                            <select id="category" name="category" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="C1">C1 - Anti-inflammatory (M01AB)</option>
+                                <option value="C2">C2 - Anti-inflammatory (M01AE)</option>
+                                <option value="C3">C3 - Analgesics (N02BA)</option>
+                                <option value="C4">C4 - Analgesics (N02BE)</option>
+                                <option value="C5">C5 - Psycholeptics (N05B)</option>
+                                <option value="C6">C6 - Psycholeptics (N05C)</option>
+                                <option value="C7">C7 - Respiratory (R03)</option>
+                                <option value="C8">C8 - Antihistamines (R06)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date">Forecast Date</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="modelType">Model Type</label>
+                            <select id="modelType" name="modelType" class="form-control" required>
+                                <option value="ensemble">🏆 Ensemble (Recommended)</option>
+                                <option value="lstm">LSTM</option>
+                                <option value="gru">GRU</option>
+                                <option value="transformer">Transformer</option>
+                                <option value="xgboost">XGBoost</option>
+                                <option value="lightgbm">LightGBM</option>
+                                <option value="prophet">Prophet</option>
+                                <option value="sarimax">SARIMAX</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Options</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="uncertaintyEstimation" checked>
+                                    <span>Uncertainty Estimation</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="confidenceIntervals" checked>
+                                    <span>Confidence Intervals</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic"></i> Generate Forecast
+                        </button>
+                        <button type="button" class="btn btn-outline" id="compareModelsBtn">
+                            <i class="fas fa-balance-scale"></i> Compare Models
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state" style="display: none;">
+            <div class="loader"></div>
+            <p>Generating forecast...</p>
+        </div>
+
+        <!-- Results Section -->
+        <section id="resultsSection" class="results-section" style="display: none;">
+            <!-- Prediction Card -->
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <h3>Forecast Result</h3>
+                    <span class="model-badge" id="modelBadge">Ensemble</span>
+                </div>
+                <div class="prediction-body">
+                    <div class="prediction-value">
+                        <div class="value-label">Predicted Sales</div>
+                        <div class="value-number" id="forecastValue">0</div>
+                        <div class="value-unit">units</div>
+                    </div>
+                    <div class="prediction-details">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar"></i>
+                            <div>
+                                <span class="detail-label">Forecast Date</span>
+                                <span class="detail-value" id="forecastDate">-</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-pills"></i>
+                            <div>
+                                <span class="detail-label">Category</span>
+                                <span class="detail-value" id="forecastCategory">-</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-brain"></i>
+                            <div>
+                                <span class="detail-label">Model</span>
+                                <span class="detail-value" id="forecastModel">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <i class="fas fa-bullseye"></i>
+                    <div class="metric-value" id="metricAccuracy">95.8%</div>
+                    <div class="metric-label">Model Accuracy</div>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="metric-value" id="metricMAE">2.34</div>
+                    <div class="metric-label">MAE</div>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-wave-square"></i>
+                    <div class="metric-value" id="metricRMSE">3.12</div>
+                    <div class="metric-label">RMSE</div>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-percentage"></i>
+                    <div class="metric-value" id="metricMAPE">4.56%</div>
+                    <div class="metric-label">MAPE</div>
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Forecast Visualization</h3>
+                    <div class="chart-controls">
+                        <button class="btn btn-sm" id="toggleUncertainty">
+                            <i class="fas fa-eye"></i> Toggle Uncertainty
+                        </button>
+                        <button class="btn btn-sm" id="fullscreenChart">
+                            <i class="fas fa-expand"></i> Fullscreen
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="forecastChart"></canvas>
+                </div>
+            </div>
+
+            <!-- AI Explanation Section (NEW!) -->
+            <div class="explanation-card">
+                <div class="explanation-header">
+                    <h3><i class="fas fa-brain"></i> AI-Powered Pharmaceutical Analysis</h3>
+                    <button class="btn btn-sm btn-outline" id="refreshExplanation">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <div id="explanationLoading" class="explanation-loading" style="display: none;">
+                    <div class="loader-sm"></div>
+                    <p>Generating pharmaceutical analysis...</p>
+                </div>
+                <div id="explanationContent" class="explanation-content" style="display: none;">
+                    <!-- Explanation will be inserted here by JavaScript -->
+                </div>
+                <div id="explanationPlaceholder" class="explanation-placeholder">
+                    <i class="fas fa-lightbulb"></i>
+                    <p>Generate a forecast to see AI-powered pharmaceutical analysis with clinical insights and recommendations</p>
+                </div>
+            </div>
+
+            <!-- Confidence Intervals -->
+            <div class="confidence-card">
+                <h3>Confidence Intervals</h3>
+                <div class="confidence-bars">
+                    <div class="confidence-item">
+                        <span class="confidence-label">68% CI (±1σ)</span>
+                        <div class="confidence-bar">
+                            <div class="confidence-range" style="left: 25%; width: 50%; background: var(--gradient-blue);"></div>
+                        </div>
+                        <span class="confidence-value" id="ci68">45 - 55 units</span>
+                    </div>
+                    <div class="confidence-item">
+                        <span class="confidence-label">95% CI (±2σ)</span>
+                        <div class="confidence-bar">
+                            <div class="confidence-range" style="left: 15%; width: 70%; background: var(--gradient-purple);"></div>
+                        </div>
+                        <span class="confidence-value" id="ci95">40 - 60 units</span>
+                    </div>
+                    <div class="confidence-item">
+                        <span class="confidence-label">99% CI (±3σ)</span>
+                        <div class="confidence-bar">
+                            <div class="confidence-range" style="left: 10%; width: 80%; background: var(--gradient-pink);"></div>
+                        </div>
+                        <span class="confidence-value" id="ci99">35 - 65 units</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Model Comparison Modal -->
+        <div id="compareModal" class="modal">
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h2>Model Comparison</h2>
+                    <button class="modal-close" id="closeCompareModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="comparison-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>MAE</th>
+                                    <th>RMSE</th>
+                                    <th>MAPE</th>
+                                    <th>Training Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="comparisonTableBody">
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/forecast.js') }}"></script>
+</body>
+</html>

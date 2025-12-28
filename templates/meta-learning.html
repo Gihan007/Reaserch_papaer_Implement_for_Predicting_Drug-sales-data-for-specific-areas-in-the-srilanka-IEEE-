@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta-Learning - PharmaPredictAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>PharmaPredictAI</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/forecast" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Forecasting</span>
+                </a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link active">
+                        <i class="fas fa-brain"></i>
+                        <span>AI Models</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="/meta-learning" class="dropdown-item">
+                            <i class="fas fa-brain"></i>
+                            <span>Meta Learning</span>
+                        </a>
+                        <a href="/advanced" class="dropdown-item">
+                            <i class="fas fa-robot"></i>
+                            <span>Advanced AI</span>
+                        </a>
+                        <a href="/causal" class="dropdown-item">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Causal Analysis</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="/analytics" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="notificationBtn" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-dropdown">
+                    <button class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="User">
+                        <span class="user-name">Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content meta-learning-page">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">
+                    <i class="fas fa-brain"></i> Meta-Learning System
+                </h1>
+                <p class="page-subtitle">Model-Agnostic Meta-Learning (MAML) and Transfer Learning for Drug Sales</p>
+            </div>
+            <div class="status-indicator" id="mamlStatus">
+                <span class="status-dot"></span>
+                <span>System Ready</span>
+            </div>
+        </div>
+
+        <!-- Meta-Learning Tabs -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="maml">
+                    <i class="fas fa-network-wired"></i> MAML Training
+                </button>
+                <button class="tab-btn" data-tab="few-shot">
+                    <i class="fas fa-bolt"></i> Few-Shot Learning
+                </button>
+                <button class="tab-btn" data-tab="transfer">
+                    <i class="fas fa-exchange-alt"></i> Transfer Learning
+                </button>
+                <button class="tab-btn" data-tab="results">
+                    <i class="fas fa-chart-pie"></i> Results
+                </button>
+            </div>
+        </div>
+
+        <!-- MAML Training Tab -->
+        <div id="mamlTab" class="tab-content active">
+            <div class="info-banner">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Model-Agnostic Meta-Learning (MAML)</strong>
+                    <p>Train a meta-model that can quickly adapt to new drug categories with minimal data</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2 class="form-title">MAML Configuration</h2>
+                <form id="mamlForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Select Categories for Meta-Training</label>
+                            <div class="category-selector">
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="categories" value="C1" checked>
+                                    <div class="checkbox-content">
+                                        <i class="fas fa-pills"></i>
+                                        <span>C1</span>
+                                        <small>Anti-inflammatory</small>
+                                    </div>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="categories" value="C2" checked>
+                                    <div class="checkbox-content">
+                                        <i class="fas fa-pills"></i>
+                                        <span>C2</span>
+                                        <small>Anti-inflammatory</small>
+                                    </div>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="categories" value="C3" checked>
+                                    <div class="checkbox-content">
+                                        <i class="fas fa-pills"></i>
+                                        <span>C3</span>
+                                        <small>Analgesics</small>
+                                    </div>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="categories" value="C4" checked>
+                                    <div class="checkbox-content">
+                                        <i class="fas fa-pills"></i>
+                                        <span>C4</span>
+                                        <small>Analgesics</small>
+                                    </div>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="categories" value="C5">
+                                    <div class="checkbox-content">
+                                        <i class="fas fa-pills"></i>
+                                        <span>C5</span>
+                                        <small>Psycholeptics</small>
+                                    </div>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="categories" value="C6">
+                                    <div class="checkbox-content">
+                                        <i class="fas fa-pills"></i>
+                                        <span>C6</span>
+                                        <small>Psycholeptics</small>
+                                    </div>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="categories" value="C7">
+                                    <div class="checkbox-content">
+                                        <i class="fas fa-pills"></i>
+                                        <span>C7</span>
+                                        <small>Respiratory</small>
+                                    </div>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="categories" value="C8">
+                                    <div class="checkbox-content">
+                                        <i class="fas fa-pills"></i>
+                                        <span>C8</span>
+                                        <small>Antihistamines</small>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mamlEpochs">Training Epochs</label>
+                            <input type="number" id="mamlEpochs" value="5" min="1" max="20" class="form-control">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-play"></i> Start MAML Training
+                    </button>
+                </form>
+            </div>
+
+            <div id="mamlProgress" class="progress-card" style="display: none;">
+                <div class="progress-header">
+                    <h3>Training Progress</h3>
+                    <span id="mamlEpochCounter">Epoch 0/5</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="mamlProgressBar"></div>
+                </div>
+                <div class="training-logs" id="mamlLogs"></div>
+            </div>
+        </div>
+
+        <!-- Few-Shot Learning Tab -->
+        <div id="few-shotTab" class="tab-content">
+            <div class="info-banner">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Few-Shot Adaptation</strong>
+                    <p>Adapt meta-learned model to new categories using only a handful of examples</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2 class="form-title">Few-Shot Configuration</h2>
+                <form id="fewShotForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fewShotCategory">Target Category</label>
+                            <select id="fewShotCategory" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="C5">C5 - Psycholeptics (N05B)</option>
+                                <option value="C6">C6 - Psycholeptics (N05C)</option>
+                                <option value="C7">C7 - Respiratory (R03)</option>
+                                <option value="C8">C8 - Antihistamines (R06)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="supportSamples">Support Samples (K-shot)</label>
+                            <input type="number" id="supportSamples" value="10" min="1" max="50" class="form-control">
+                            <small>Number of examples to use for adaptation</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="adaptationSteps">Adaptation Steps</label>
+                            <input type="number" id="adaptationSteps" value="20" min="5" max="100" class="form-control">
+                            <small>Fine-tuning iterations</small>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-bolt"></i> Run Few-Shot Adaptation
+                    </button>
+                </form>
+            </div>
+
+            <div id="fewShotResults" class="results-grid" style="display: none;">
+                <div class="result-card">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Adaptation Complete</h3>
+                    <p id="fewShotMessage">Model adapted successfully</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transfer Learning Tab -->
+        <div id="transferTab" class="tab-content">
+            <div class="info-banner">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Transfer Learning</strong>
+                    <p>Transfer knowledge from a source category to a target category through fine-tuning</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2 class="form-title">Transfer Learning Configuration</h2>
+                <form id="transferForm">
+                    <div class="transfer-flow">
+                        <div class="transfer-box source">
+                            <label>Source Category</label>
+                            <select id="sourceCategory" class="form-control" required>
+                                <option value="">Select Source</option>
+                                <option value="C1">C1 - Anti-inflammatory</option>
+                                <option value="C2">C2 - Anti-inflammatory</option>
+                                <option value="C3">C3 - Analgesics</option>
+                                <option value="C4">C4 - Analgesics</option>
+                            </select>
+                        </div>
+
+                        <div class="transfer-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+
+                        <div class="transfer-box target">
+                            <label>Target Category</label>
+                            <select id="targetCategory" class="form-control" required>
+                                <option value="">Select Target</option>
+                                <option value="C5">C5 - Psycholeptics</option>
+                                <option value="C6">C6 - Psycholeptics</option>
+                                <option value="C7">C7 - Respiratory</option>
+                                <option value="C8">C8 - Antihistamines</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fineTuneSteps">Fine-Tuning Steps</label>
+                        <input type="number" id="fineTuneSteps" value="50" min="10" max="200" class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-exchange-alt"></i> Start Transfer Learning
+                    </button>
+                </form>
+            </div>
+
+            <div id="transferResults" class="results-grid" style="display: none;">
+                <div class="result-card">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Transfer Complete</h3>
+                    <p id="transferMessage">Knowledge transferred successfully</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Tab -->
+        <div id="resultsTab" class="tab-content">
+            <div class="results-overview">
+                <div class="overview-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Meta-Model Status</h3>
+                    <div class="status-value" id="metaModelStatus">Not Trained</div>
+                </div>
+                <div class="overview-card">
+                    <i class="fas fa-layer-group"></i>
+                    <h3>Categories Trained</h3>
+                    <div class="status-value" id="categoriesTrained">0</div>
+                </div>
+                <div class="overview-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Last Training</h3>
+                    <div class="status-value" id="lastTraining">Never</div>
+                </div>
+            </div>
+
+            <div class="performance-comparison">
+                <h3>Meta-Learning Performance Comparison</h3>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Category</th>
+                            <th>Samples Used</th>
+                            <th>Final MAE</th>
+                            <th>Training Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="performanceTableBody">
+                        <tr>
+                            <td colspan="6" class="empty-state">No results available. Train models to see performance metrics.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/meta-learning.js') }}"></script>
+</body>
+</html>

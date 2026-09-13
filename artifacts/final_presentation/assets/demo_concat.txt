@@ -1,0 +1,7 @@
+file 'C:/Users/user/Desktop/Final Reaserch/Reaserch_papaer_Implement_for_Predicting_Drug-sales-data-for-specific-areas-in-the-srilanka-IEEE-/artifacts/final_presentation/assets/demo_frame_0.png'
+duration 15
+file 'C:/Users/user/Desktop/Final Reaserch/Reaserch_papaer_Implement_for_Predicting_Drug-sales-data-for-specific-areas-in-the-srilanka-IEEE-/artifacts/final_presentation/assets/demo_frame_1.png'
+duration 15
+file 'C:/Users/user/Desktop/Final Reaserch/Reaserch_papaer_Implement_for_Predicting_Drug-sales-data-for-specific-areas-in-the-srilanka-IEEE-/artifacts/final_presentation/assets/demo_frame_2.png'
+duration 15
+file 'C:/Users/user/Desktop/Final Reaserch/Reaserch_papaer_Implement_for_Predicting_Drug-sales-data-for-specific-areas-in-the-srilanka-IEEE-/artifacts/final_presentation/assets/demo_frame_2.png'

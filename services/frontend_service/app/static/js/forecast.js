@@ -95,6 +95,34 @@ function displayForecastResults(data) {
     document.getElementById('forecastCategory').textContent = data.category;
     document.getElementById('forecastModel').textContent = data.model_used;
     document.getElementById('modelBadge').textContent = data.model_used;
+
+    const isStacking = data.model_type === 'stacking';
+    document.querySelector('.confidence-card').style.display = isStacking ? 'none' : '';
+    document.querySelector('.explanation-card').style.display = isStacking ? 'none' : '';
+    document.getElementById('toggleUncertainty').style.display = isStacking ? 'none' : '';
+    document.getElementById('compareModelsBtn').style.display = isStacking ? 'none' : '';
+    if (isStacking) {
+        const metrics = data.evaluation_metrics || {};
+        document.getElementById('metricAccuracy').textContent = 'Not defined';
+        for (const key of ['MAE', 'RMSE', 'MAPE']) {
+            document.getElementById('metric' + key).textContent = metrics[key] == null
+                ? 'Unavailable' : Number(metrics[key]).toFixed(4) + (key === 'MAPE' ? '%' : '');
+        }
+        const grid = document.querySelector('.metrics-grid');
+        let caption = document.getElementById('stackingMetricCaption');
+        if (!caption) {
+            caption = document.createElement('p');
+            caption.id = 'stackingMetricCaption';
+            grid.insertAdjacentElement('beforebegin', caption);
+        }
+        caption.textContent = data.evaluation_label;
+        caption.style.display = '';
+        createStackingChart(data.chart_data);
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+    }
+    const caption = document.getElementById('stackingMetricCaption');
+    if (caption) caption.style.display = 'none';
     
     // Update metrics (mock data for now)
     updateMetrics(data);
@@ -110,6 +138,27 @@ function displayForecastResults(data) {
     
     // Scroll to results
     resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function createStackingChart(series) {
+    if (forecastChart) forecastChart.destroy();
+    const labels = [...series.dates];
+    if (!labels.includes(series.forecast_date)) labels.push(series.forecast_date);
+    labels.sort();
+    const actual = new Map(series.dates.map((date, index) => [date, series.actual[index]]));
+    forecastChart = new Chart(document.getElementById('forecastChart'), {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                {label: 'Recorded weekly sales', data: labels.map(date => actual.get(date) ?? null),
+                 borderColor: '#667eea', pointRadius: 0, borderWidth: 2},
+                {label: 'Selected weekly result', data: labels.map(date => date === series.forecast_date ? series.forecast_value : null),
+                 borderColor: '#f5576c', backgroundColor: '#f5576c', pointRadius: 6, showLine: false}
+            ]
+        },
+        options: {responsive: true, maintainAspectRatio: false}
+    });
 }
 
 function updateMetrics(data) {

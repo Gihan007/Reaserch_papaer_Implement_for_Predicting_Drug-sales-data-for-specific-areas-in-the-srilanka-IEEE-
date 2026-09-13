@@ -80,6 +80,9 @@ def forecast_sales(category, date_str, model_type='ensemble', base_path=''):
 
             # Use last available date as reference
             closest_date = last_date
+            if model_type == 'stacking':
+                closest_date = last_date + pd.Timedelta(weeks=(days_ahead + 6) // 7)
+                input_date = closest_date
 
         # Generate plot
         plt.figure(figsize=(12, 8))
@@ -116,6 +119,8 @@ def forecast_sales(category, date_str, model_type='ensemble', base_path=''):
         return forecast_value, closest_date, plot_filename, model_used
 
     except Exception as e:
+        if model_type == 'stacking':
+            raise
         print(f"Error in forecast_sales: {e}")
         import traceback
         traceback.print_exc()
@@ -123,12 +128,42 @@ def forecast_sales(category, date_str, model_type='ensemble', base_path=''):
         dummy_date = pd.Timestamp('2023-12-03')
         return 50.0, dummy_date, 'dummy_plot.png', 'Error'
 
+def stacking_response_details(category, forecast_value, prediction_date):
+    """Actual chart data and separately labelled held-out metrics for the UI."""
+    import json
+    from src.models.stacking_model import load_weekly_series, series_fingerprint
+    dates, values = load_weekly_series(category)
+    evaluation = None
+    path = ROOT_DIR / 'src/evaluation_results/stacking_results.json'
+    if path.exists():
+        report = json.loads(path.read_text(encoding='utf-8'))
+        entry = report.get('categories', {}).get(category, {})
+        if entry.get('status') == 'ok' and entry.get('dataset_sha256') == series_fingerprint(dates, values):
+            evaluation = entry['metrics']['stacking']
+    return {
+        'model_type': 'stacking', 'evaluation_metrics': evaluation,
+        'evaluation_label': 'Separate chronological holdout; not accuracy of this individual forecast',
+        'chart_data': {'dates': [str(d.date()) for d in dates], 'actual': values.tolist(),
+                       'forecast_date': str(pd.Timestamp(prediction_date).date()),
+                       'forecast_value': float(forecast_value)},
+    }
+
+
 def get_model_forecast(category, days_ahead, model_type, base_path=''):
     """
     Get forecast from specified model
     """
     try:
-        if model_type == 'sarimax':
+        if model_type == 'stacking':
+            from src.models.stacking_model import forecast_stacking
+            # The models operate on weekly rows, not individual calendar days.
+            steps = (days_ahead + 6) // 7
+            values = forecast_stacking(
+                category, steps, data_dir=_category_csv_path(category, base_path).parent,
+                model_dir=_model_dir('stacking', base_path),
+            )
+            return float(values[-1]), "Stacking (XGBoost + LSTM + GRU / Ridge)"
+        elif model_type == 'sarimax':
             return get_sarimax_forecast(category, days_ahead, base_path)
         elif model_type == 'xgboost':
             return get_xgboost_forecast(category, days_ahead, base_path)
@@ -149,6 +184,8 @@ def get_model_forecast(category, days_ahead, model_type, base_path=''):
             return get_ensemble_forecast(category, days_ahead, base_path)
 
     except Exception as e:
+        if model_type == 'stacking':
+            raise
         print(f"Error getting {model_type} forecast: {e}")
         # Fallback to simple average
         df = pd.read_csv(_category_csv_path(category, base_path), index_col=0, parse_dates=True)

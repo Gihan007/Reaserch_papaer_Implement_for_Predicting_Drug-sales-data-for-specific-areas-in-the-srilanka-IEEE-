@@ -12,7 +12,7 @@ for import_path in (ROOT_DIR, ROOT_DIR / "src"):
     if str(import_path) not in sys.path:
         sys.path.insert(0, str(import_path))
 
-from services.forecast_service.app.forecasting import forecast_sales
+from services.forecast_service.app.forecasting import forecast_sales, stacking_response_details
 from libs.common.metrics import install_metrics
 from libs.common.serialization import make_json_serializable
 
@@ -104,7 +104,8 @@ async def api_forecast(request: Request):
             'plot_url': str(plot_file),
             'model_used': str(model_used),
             'category': str(category),
-            'input_date': str(date)
+            'input_date': str(date),
+            **(stacking_response_details(category, forecast_value, closest_prediction_date) if model_type == 'stacking' else {}),
         })
 
     except Exception as e:

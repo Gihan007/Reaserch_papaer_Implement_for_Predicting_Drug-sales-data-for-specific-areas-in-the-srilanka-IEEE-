@@ -1,0 +1,263 @@
+SLIDE 1
+Emotion Recognition and Solution Recommendation via Tone and Facial Analysis 
+Student
+CS/2019/045
+K.S.M Dilhara
+Supervisor
+Dr Rasika Rajaphaksha
+
+SLIDE 2
+Overview
+The Problem
+Objectives
+Literature 
+Methodology
+5. Result
+6. Application
+7. Conclusion
+8. Reference
+
+SLIDE 3
+The Problem
+P
+eople hide emotions due to stigma or fear.
+Systems only detect, no guidance provided.
+Most use face OR voice, not both.
+Limited, biased data affects accuracy.
+No system offers multimodal detection + real-time support.
+Source: Worl
+d Health Organization, 2023
+
+SLIDE 4
+Objectives
+Detect emotions via face, voice or both (user choice).
+Analyze emotions in real-time.
+Provide personalized support.
+Ensure accuracy and fairness.
+Short-term solutions
+: Quick relief after detection
+Long-term solutions
+: Sustained support after understanding the problem
+Develop a multimodal emotion recognition model using facial expressions and voice features.
+Train and optimize models for accuracy, fairness, and real-time performance.
+Validate the model using cross-validation and evaluation metrics.
+
+SLIDE 5
+Fac
+e-based Emotion Recognition (FER):
+CNNs (VGG16, ResNet, MobileNetV2) detect facial expressions.
+Applications: HCI, telemedicine, driver monitoring.
+Challenges: dataset bias, lighting, occlusion.
+Speech-based Emotion Recognition (SER):
+CNN-LSTM on MFCC, Chroma, Mel spectrograms.
+Accuracy: ~82% on RAVDESS & CREMA-D.
+Limitations: speaker-specific, acted emotions, noisy environments.
+Multimodal Approaches:
+Combine face + voice (+text) for better accuracy.
+Examples: TA-AVN, reinforcement learning frameworks, AFME.
+Benefits: more realistic emotion detection, cultural adaptation.
+Existing Literature
+
+SLIDE 6
+G
+aps Identified:
+Most systems: single modality, limited datasets, no real-time actionable support.
+Few systems integrate FER + SER + personalized recommendations.
+Existing Literature
+No system offers real-time, multimodal detection + actionable support.
+
+SLIDE 7
+Methodology
+Visual Emotion Recognition (FER)
+Data: FER-2013 dataset (7 emotions: Angry, Disgust, Fear, Happy, Sad, Surprise, Neutral).
+Preprocessing: Image normalization, resizing (64x64), and advanced augmentation (rotation, flips, shifts) to combat class imbalance.
+Model: A custom Deep Convolutional Neural Network (CNN).
+Architecture: 5 convolutional blocks with increasing filters (64 → 512), Batch Normalization, Dropout layers.
+Performance: Achieved 70.63% test accuracy on the challenging FER-2013 benchmark.
+
+SLIDE 8
+Methodology
+Speech
+ Emotion Recognition (SER)
+Data: Combined CREMA-D & RAVDESS datasets for diversity and robustness.
+Feature Extraction: MFCCs, Mel-Spectrograms, Spectral Contrast.
+Model: A Hybrid CNN-LSTM architecture.
+CNN: Extracts spatial features from audio spectrograms.
+LSTM: Captures temporal dependencies in speech.
+Performance: Achieved ~78.73% test accuracy on a refined set of 6 emotions, significantly improving upon baseline models.
+
+SLIDE 9
+Methodology
+Multi
+modal Fusion & Agentic Recommendation
+Fusion Strategy: Late Fusion. Weighted average of model predictions based on individual model accuracy.
+Intelligent Recommendation (The CrewAI Engine)
+Replaces static databases with a dynamic, multi-agent system.
+Agents collaborate like a expert team:
+Emotion Intake Agent: Validates the detected emotion.
+Evidence-Based Analyzer: Researches proven psychological strategies.
+Solution Generator: Personalizes advice to the user's context.
+Result: Provides personalized, scientifically-grounded, and compassionate support in natural language.
+
+SLIDE 10
+Methodology:Work flow of the CrewAI
+
+SLIDE 11
+Methodology
+Technical Stack
+🧠
+ Deep Learning & Modeling
+ TensorFlow, Keras, PyTorch
+🎵 
+Aud
+io Processing
+ Librosa
+⚙️
+Backend & API
+ Flask
+💻 
+Frontend
+ React, TypeScript
+🛠️ 
+Development & Deployment
+ 
+Google Colab
+
+SLIDE 12
+Result
+Regarding facial emotion recognition
+
+SLIDE 13
+Result
+Regarding facial emotion recognition
+H
+i
+gh
+li
+gh
+t
+s
+ of 
+the FER M
+od
+el
+ 
+D
+e
+sign
+Deep CNN with 10 layers
+ as 5 blocks with SE blocks
+Max Blur 
+pooling
+Regul
+a
+r
+i
+za
+tio
+n
+ 
+an
+d 
+s
+t
+abili
+t
+y
+Data augmenta
+tion and oversampling
+Enhanced fully connec
+ted layers
+
+SLIDE 14
+Result
+Regarding audio emotion recognition
+
+SLIDE 15
+Result
+Regarding audio emotion recognition
+H
+i
+gh
+li
+gh
+t
+s
+ of 
+the SER M
+od
+el
+ 
+D
+e
+sign
+CNN
+-LSTM
+ with 
+channe
+l
+-wise  
+Attention mechanism
+Data augmenta
+tion, oversampling& undersapling
+Handling class
+ imbalance
+
+SLIDE 16
+Result
+Regarding fusion technology
+Finding 1: Early testing with a limited, private dataset of 120 samples resulted in 41.67% accuracy, underscoring the dual challenges of data volume and audio-visual alignment.
+Finding 2: A strategic shift to a curated, high-quality dataset—built from the SAVEE corpus and manually aligned images—yielded a dramatic performance increase to 74.67% accuracy.
+Conclusion: This proves that dataset quality, size, and modality alignment are even more critical than model architecture for successful multimodal fusion. Our curated SAVEE-based dataset serves as a strong foundation for future work.
+
+SLIDE 17
+ Application:Demonstrate Vedio
+
+SLIDE 18
+ Application:Multimodal Support in Action
+
+SLIDE 19
+Application:Work flow of the system
+
+SLIDE 20
+Conclusions
+1.
+2.
+3.
+An AI crew (CrewAI) that reasons about context to generate personalized support plans based on age and paticular reasons
+.
+A working system that fuses face & voice emotion recognition in real-time 
+A novel architecture that moves beyond static chatbots to dynamic, empathetic AI
+
+SLIDE 21
+Research Paper submission
+
+SLIDE 22
+Research Paper submission
+
+SLIDE 23
+Acknowledgment
+I sincerely thank Dr. Rasika Rajapakshe, my supervisor, for his continuous guidance and valuable support throughout this research.
+I would also like to thank my friend Nipuni, who kindly shared her age prediction model to be integrated into my system.
+Finally, my heartfelt gratitude goes to my family, who generously sponsored the OpenAI API key and Colab resources, making this work possible.
+
+SLIDE 24
+Reference
+R. KUMAR, "Development of a Facial Expression Recognition System for the Doctor LINK Telemedicine Platform Using Transfer Learning," February 24, 2025.
+F. C. C. a. N. C. Francesco Ardan Dal Rí, "Speech Emotion Recognition and Deep
+Learning: An Extensive Validation Using Convolutional Neural Network," vol. 10, 2023
+S. Li an
+d W. Deng, "Deep Facial Expression Recognition: A Survey," IEEE Transactions on Affective Computing, vol. 13, no. 3, pp. 1195-1215, 1 July-Sept. 2022. doi: 
+10.1109/TAFFC.2020.2981446
+.
+E. Lieskovská, M. Jakubec, R. Jarina an
+d M. Chmulík, "A Review on Speech Emotion
+Recognition Using Deep Learning and Attention Mechanism," vol. 10, p. 1163, 202
+1
+.
+F. S. D. Y. P. S. K. D. N. A. Ankit Shukla, " An Intelligent Framework for Emotion
+Detection from Speech Signals," Journal of Emerging Technologies and Innovative
+Research, June 2025.
+A. Mollahosseini, B. Hasani, and M. H. Mahoor, "AffectNet: A Database for Facial Expression, Valence, and Arousal Computing in the Wild," IEEE Transactions on Affective Computing, vol. 10, no. 1, pp. 18-31, 1 Jan.-March 2019. doi: 10.1109/TAFFC.2017.2740923.
+
+SLIDE 25

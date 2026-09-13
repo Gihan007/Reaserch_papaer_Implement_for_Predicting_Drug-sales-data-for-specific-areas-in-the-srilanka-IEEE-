@@ -1,0 +1,740 @@
+979-8-3315-2326-8/25/$31.00 ©2025 IEEE 
+Predicting medical drug sales in a specific area for 
+categorical drugs using time series forecasting 
+ 
+Subhash Bandara Ekanayake 
+Department of Computer System 
+Engineering 
+University of Kelaniya 
+Colombo, SriLanka 
+ekanaya-cs20009@stu.kln.ac.lk 
+Mohomad Nasmeen 
+Department of Computer System 
+Engineering 
+University of Kelaniya 
+Colombo, SriLanka 
+nasmeen-cs20036@stu.kln.ac.lk 
+Gihan Lakmal 
+Department of Computer System 
+Engineering 
+University of Kelaniya 
+Colombo, SriLanka 
+lakmalb-cs20015@stu.kln.ac.lk 
+Pabodha Vimanshani 
+Department of Computer System 
+Engineering 
+University of Kelaniya 
+Colombo, SriLanka 
+kariyap-cs20053@stu.kln.ac.lk 
+Akash Perera 
+Department of Computer System 
+Engineering 
+University of Kelaniya 
+Colombo, SriLanka 
+pererau-cs20004@stu.kln.ac.lk 
+ 
+Abstract— Accurately forecasting pharmaceutical drug sales 
+is a significant challenge faced by many firms, particularly in 
+Sri Lanka, where factors such as seasonality, weather, local 
+health crises, importation issues, currency fluctuations, and 
+economic instability affect inventory management. These 
+challenges often lead to frequent conditions of either shortages 
+or overstocking of drugs, which adversely affect healthcare 
+delivery and business profitability. This study addresses this 
+issue through the development of a data-driven system using 
+machine learning to predict drug sales efficiently and 
+accurately. This work involved gathering sales data from local 
+pharmacies, performing some pre-processing steps, and 
+implementing a time-series forecast using the SARIMA model, 
+which works efficiently with seasonal variations in sales data. A 
+locally hosted, user-friendly web application was developed 
+using the Flask framework to present these predictions in a 
+readable format for pharmacists and drug sellers. The system 
+was also validated on an external dataset, demonstrating high 
+accuracy in the forecasted sales, which helped improve 
+inventory management practices. The proposed system reduces 
+drug shortages, minimizes wastage due to expiration, and 
+enhances supply chain efficiency, thereby improving healthcare 
+delivery and business outcomes. This research provides 
+evidence of the opportunity to leverage pharmaceutical sales 
+data to identify disease trends and inform public health 
+strategies. The model can be further improved and applied in 
+various aspects by including additional variables. This research 
+bridges gaps in supply chain management, improving the 
+availability of medications and making inventory management 
+more predictable, benefiting both public health and industry 
+stakeholders. 
+Keywords—drug 
+sales 
+analysis, 
+pharmaceutical 
+sales 
+prediction, public health, SARIMA, time series forecasting 
+I. INTRODUCTION  
+The pharmaceutical industry is inherently dynamic; 
+hence, accurate sales forecasting is increasingly crucial for 
+public health and for responding with appropriate marketing 
+strategies. The industry in Sri Lanka faces many challenges, 
+including 
+seasonal 
+business 
+cycles, 
+varied 
+weather 
+conditions, local epidemics, importation obstacles, exchange 
+rate fluctuations, and economic instability. These factors 
+contribute to unpredictable demand for drugs, often resulting 
+in drug shortages and oversupply, which negatively impact 
+public health outcomes and business viability. Despite the 
+critical importance of accurate sales predictions, predictive 
+modeling techniques have been underexplored in the Sri 
+Lankan pharmaceutical market. 
+ This study addresses these challenges by developing a 
+data-driven system that leverages advanced machine learning 
+algorithms to forecast drug sales with high accuracy, 
+particularly focusing on categorical drugs. The research 
+analyses historical sales data to identify important patterns and 
+trends driving drug demand, enabling better decision-making 
+in inventory and supply chain management for sellers and 
+pharmacists. A user-friendly web application, built using the 
+Flask framework, visually presents sales forecasts in an 
+understandable format for practical implementation of the 
+real-world problem. The models are subjected to external 
+validation with datasets, ensuring their reliability and 
+applicability. This work concludes by bridging the gap 
+between data science and pharmaceutical retailing in Sri 
+Lanka, enhancing drug availability and reducing wastage to 
+improve efficiency in the supply chain and, as a result, 
+contribute to a healthier and more resilient society. 
+II. LITERATURE REVIEW 
+According to the U.M. Sirisha, M.C Belavagi, G. Attigeri 
+[23], Time series forecasting using historical data is 
+significantly important nowadays in many fields including 
+healthcare field. Profit analysis using financial data is crucial 
+for any type of businesses and companies. It helps to find the 
+predict values for the future and get benefits for the business 
+thorough it and, if a time series is univariate and contains 
+trend or seasonal components, then can use Seasonal ARIMA 
+(SARIMA) model.  K. Alice, S. H. ul Haq Andrabi, and S. 
+Jha said that [22], Sales forecasting is the process of 
+predicting future sales for a given time. It is an important 
+business function that helps companies to make correct 
+decisions about future plans. Sales forecasting need for 
+businesses to plan, budget, invest and to get profits. More 
+accurate sales predictions can help to make better-informed 
+business decisions. 
+A. Traditional Forecasting Methods in Pharmaceutical 
+Sales 
+• 
+Naive 
+Bayes: 
+Known 
+for 
+simplicity 
+and 
+effectiveness but assumes predictor independence, 
+limiting its accuracy in complex sales dynamics [1] 
+• 
+Seasonal Naive: Utilizes sales data from equivalent 
+past intervals to capture seasonal trends effectively  
+[2] 
+ 
+
+• 
+ARIMA: Effective for linear patterns, but 
+combining it with other methods improves 
+performance in non-linear scenarios [3]  
+ 
+• 
+Exponential Smoothing: Includes Single, Double, 
+and Triple (Holt-Winters) methods for steady trends 
+and seasonality, but struggles with nonlinear data 
+[4]  
+B. Machine learning techniques for pharmaceutical sales 
+forecasting 
+• 
+Neural Networks (LSTM): Bandara [8] highlights 
+the capabilities of LSTM networks in effectively 
+remembering and retrieving information over 
+extended periods, making them well-suited for 
+forecasting tasks. In a study by Yuxuan Han [11], 
+LSTM models outperformed traditional methods 
+like ARIMA in forecasting pharmaceutical sales, 
+demonstrating their ability to capture complex data 
+patterns over time. The study emphasizes the 
+potential of LSTM networks to significantly 
+improve 
+sales 
+forecasting 
+accuracy 
+in 
+the 
+pharmaceutical industry.   
+ 
+• 
+Ensemble Methods (XGBoost) Chen and Guestrin 
+[10] introduce XGBoost, highlighting its ability to 
+handle sparse data, perform parallel computing, and 
+find optimal tree splits using both exact and 
+approximate 
+algorithms. 
+In 
+the 
+context 
+of 
+pharmaceutical sales forecasting, XGBoost has 
+demonstrated its effectiveness in capturing complex 
+non-linear patterns and handling high-dimensional 
+data, making it a valuable tool for accurate 
+predictions. 
+ 
+• 
+Prophet: Zunic et al. [7] highlight Prophet's ability 
+to capture intricate sales patterns, making it well 
+suited for applications in the pharmaceutical 
+industry, where seasonality plays a significant role, 
+and it is a powerful forecasting tool designed to 
+handle complex patterns ranging from daily to 
+yearly seasonality. 
+C. Advantages over Traditional Methods  
+• 
+Non-linear Pattern Capture: These techniques can 
+effectively capture non-linear relationships and 
+complex patterns in data, which are common in 
+pharmaceutical sales dynamics [9] 
+ 
+• 
+Handling 
+High-Dimensional 
+Data: 
+Ensemble 
+methods like XGBoost can handle high dimensional 
+data with ease, making them suitable for forecasting 
+tasks involving multiple predictors [10] 
+ 
+• 
+Adaptability: Neural networks and ensemble 
+models can adapt to changing market conditions 
+and learn from new data, providing more accurate 
+and uptodate forecasts [8, 9]  
+ 
+• 
+Seasonality Modelling: Techniques like Prophet are 
+specifically 
+designed 
+to 
+handle 
+multiple 
+seasonalities, which are crucial in pharmaceutical 
+sales forecasting [7] 
+D. Challenges Faced in the Pharmaceutical Supply Chain 
+and Forecasting 
+Moosivand, Rajabzadeh Ghatari, and Rasekh [13] explore 
+the challenges of forecasting and supply chain planning in 
+pharmaceutical manufacturing. They identify several key 
+challenges including. 
+• 
+Demand variability: The demand for 
+pharmaceutical products can be highly variable and 
+unpredictable, influenced by factors such as market 
+trends, disease outbreaks, and changes in 
+healthcare regulations. 
+ 
+• 
+Regulatory compliance: The pharmaceutical 
+industry is heavily regulated, and companies must 
+comply with strict guidelines and regulations 
+regarding drug manufacturing, storage, and 
+distribution, which can add complexity to supply 
+chain operations. 
+ 
+• 
+Coordination: Effective coordination between 
+different stages of the supply chain, such as 
+manufacturing, distribution, and retail, is crucial 
+for ensuring timely delivery and avoiding shortages 
+or oversupply. 
+ 
+Yani and Aamer [14] focus specifically on the 
+importance of demand forecasting accuracy in the 
+pharmaceutical supply chain. They highlight that inaccurate 
+demand forecasts can lead to significant consequences, such 
+as stockouts, expired inventory, and inefficient resource 
+allocation. The authors suggest that machine learning 
+techniques can improve demand forecasting accuracy by 
+capturing complex patterns and incorporating multiple data 
+sources. 
+ 
+Zhu et al. [15] propose a novel demand forecasting 
+framework for the pharmaceutical industry that leverages 
+advanced machine learning models. They emphasize the need 
+for accurate forecasting to address the challenges of demand 
+variability and supply chain complexity. The framework 
+integrates multiple data sources, including sales data, 
+inventory levels, and external factors like weather and disease 
+patterns, to provide more reliable demand predictions. The 
+BioPhorum Operations Group's Best Practice Guide [12] 
+underscores the necessity of accurate forecasting, transparent 
+communication, and strategic alignment in improving supply 
+chain efficiency within the biopharmaceutical industry. The 
+guide highlights the importance of forecasting in ensuring 
+consistent patient supply and effectively responding to 
+dynamic market demands. 
+ 
+KPMG's "Pharma 2030: From evolution to revolution" 
+report [17] further emphasizes the potential of artificial 
+intelligence (AI) and big data analytics in enhancing demand 
+forecasting accuracy and resource allocation efficiency 
+within the pharmaceutical industry. The report suggests that 
+these technologies will revolutionize traditional practices and 
+enable more data-driven decision-making in supply chain 
+management.     
+
+III. DESIGN AND IMPLEMENTATION METHODOLOGY 
+In this section, a systematic approach is described for 
+designing and implementing the predictive system for 
+medical drug sales forecasting in particular areas. The 
+approach assures the development of a useful and easy to use 
+solution, mixing machine learning techniques and a web-
+based interface to help pharmacists and drug sellers manage 
+inventory.  
+ 
+Following diagram outlines the structured process 
+followed in this research, from identifying the problem and 
+objectives to data collection, analysis, model development, 
+and the final presentation of findings and recommendations. 
+ 
+Fig. 1.   Research flow diagram 
+ 
+The overall design is modular in nature comprising of the 
+data collection, data preprocessing, development of the 
+machine learning model and integration with web 
+application. The aim is to enable smooth linkage between this 
+predictive model and end users by supplying access through 
+a web interface and preserve accuracy and reliability of sales 
+forecast [13] and [15]. 
+A. Data Collection and Preprocessing   
+The data of sales was compiled with the help of returned 
+registered subordinate local pharmacies. One-year data was 
+deemed a necessary palette to infer seasonal trends and 
+variations periodically, where the forecasting model is 
+sensitive to those variations [14] and [18].  
+ 
+Again, the actions that were taken on this data set can be 
+well understood under the broader umbrella of preprocessing 
+of data. Data pre-processing involved dealing with missing 
+values and outliers with a view on achieving clean data [5]. 
+Feature engineering was performed by categorizing the 
+dataset by drug types and including time-dependent factors 
+that may affect sales, including weekly sales [6]. For finding 
+the stationarity of the time series data the first integrated 
+stationary test was performed with the help of Augmented 
+Dickey–Fuller (ADF) test [5]. Also, the data was divided into 
+training and testing data sets in order to feed into a machine 
+learning model used to predict performances from the 
+obtained information. 
+B. Model Development 
+The Seasonal Autoregressive Integrated Moving Average 
+(SARIMA) model was selected for its robustness in handling 
+seasonal patterns and trends in time series data. This made it 
+well-suited for predicting the sales of medical drugs across 
+different categories [8],[3] and [21]. The SARIMA model 
+was trained on historical sales data for each drug category, 
+with parameters optimized to minimize prediction error 
+during training. The model outputs weekly sales forecasts, 
+including confidence intervals that indicate the reliability of 
+the predictions [21].  
+C. Web Application Development 
+Essential to the current design, Flask was used to connect 
+the backend predictive model to the frontend look and feel. 
+This allowed for a proper linkage between the actual 
+machine learning model and the final web application, 
+thereby allowing the predictions of the model to be passed 
+on to the user in real time with an easy to use web interface 
+[7] and [12].   
+      1)Frontend Development: This web site has been 
+implemented using HTML and CSS to present a flawless, 
+consistent and user-friendly interface. C B devices were 
+standard dialog boxes which were used for selection of drug 
+category and prediction date and results of drug prices were 
+given numerically and in graphical form for better 
+interaction and for better understanding of results [10] and 
+[12].   
+      2)Backend Development: Most importantly Python was 
+very useful in handling of back end of logic to interconnect 
+the web base interface and the machine learnt model. By 
+employing Flask’s Render Template, HTML page inputs 
+were entered by the user and directly translated to page 
+generation, eliminating complications inherent in the 
+interaction process and offering a smooth user interface [7] 
+and [19]. 
+D. User Interface Design 
+Simplicity and functionality in design made user interface 
+(UI) design for a usable user interface for users, which 
+include pharmacists and drug sellers. Usability, readability 
+and navigation were key design elements implemented.  
+1)Pages: The web application includes four primary 
+pages to facilitate user interaction. Navigation is from input 
+to results and/or from results to about and from start page as 
+the entry point. The Input Page has a form based interface 
+where we can select which mature drug category to predict 
+and what date to predict. The output on the Results Page 
+shows the predicted sales values, the confidence intervals 
+and an comparative line graph between the historical and 
+forecasted data. And the About page provides the details of 
+the why, what, who, and how of the application and the 
+development team behind this project [15] and [16].  
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Fig. 2.   Application starting page 
+ 
+Fig. 3.   Category selection page 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Fig. 4.   Showing final prediction 
+ 
+2)Form Elements: It also features user friendly form 
+controls to make using it simple. Users can choose a specific 
+date for the sales forecast with the Date Picker and easily 
+select drug categories in the Dropdown Menus grouped under 
+its related classifications. Desired results page was crafted to 
+deliver the forecasts. Using Line Graphs, we can see predict 
+sales trends against historical data so that our viewers can 
+understand the data in clear and easy ways. Graphs show 
+labels, legends, different colors separately for historical and 
+predicted data points for comparing. Furthermore, Dynamic 
+Visualization updates in real time based on user input 
+providing immediate feedback [9].   
+ 
+3)Visualization: Key principles for an optimal user 
+experience guide the design. To create a look that's 
+professional but easy to understand, a medical themed, high 
+contrast, low demand interface was chosen. Readability: 
+Being white text on dark background, with the typography 
+making it really clear and legible to read. Responsiveness: It’s 
+fully compatible with desktops, tablets and mobile phones, so 
+a user experience across platforms is no issue [12][19].   
+ 
+4)Consistency and Aesthetics: The design adheres to the 
+following principles  
+• 
+Color Scheme: a medical-themed, high contrast, 
+low demand, low resource interface with 
+elements that promote a professional and easy to 
+understand interface.  
+ 
+• 
+Readability: White text on dark backgrounds for 
+easy reading, a clear and legible typography. 
+Responsiveness: Compatible with all devices, 
+desktops, tablets and mobile phones [12]. 
+ 
+     5)Accessibility Features: The design is designed for ease 
+of use and caters for a wide range of users, from members 
+with no technical experience at all. It styles buttons and links 
+with hover effect hover effects and tooltips for guidance. 
+Navigation is intuitive, and users can literally switch from 
+one page to another, and if it’s not clear already, there is a 
+workflow and users who lack tech skills still got access 
+[20][19].  
+ 
+      6)Implementation Workflow: Python was used to develop 
+the backend of the application. It uses libraries from NumPy 
+and Pandas to clean the data in the most efficient way 
+possible. We also used these libraries to clean and structure 
+data and handle large datasets [6][18]. After analyzing 
+forecasting capabilities via scikit-learn, an algorithm was 
+chosen to induce SARIMA model which can handle seasonal 
+patterns and trends and can generate accurate and reliable 
+forecasts [8][3]. Robust error handling and data validation 
+was added for maintaining the predictions’ quality, as well as 
+for the backend.  
+       This was created making use of HTML and CSS, to give 
+an appealing, wearable, and responsive structure. A 
+consistent user experience across devices, from desktop to 
+mobile phone, was taken care of. Interactive elements were 
+introduced to increase the visibility and provide real time 
+understanding to users. These features keep users in place, no 
+matter the expertise in terms of the app.   
+       Flask served as a lightweight Python web framework 
+with the integration implemented between the front end and 
+back end. It bridged real time communication between the 
+prediction engine and the user interface. The backend 
+processed user inputs (e.g. selected drug categories, and 
+dates) and returned required predictions to the frontend in a 
+user friendly way. This integration made the system both 
+functional and user friendly, it became a great experience for 
+mouth to mouth sales for pharmacists and for drug sellers 
+[19][7].  
+ 
+
+      7)Diagrams Supporting Design: Diagrams of the key 
+aspects of the design and user interactions were developed to 
+effectively communicate how the system works and its 
+workflow. Through these diagrams, these describe how the 
+system behaves, who are the users and what are the process 
+to be done in order.   
+ 
+7.1) Use Case Diagram: The Use Case Diagram 
+shows a typical scenario between the users—pharmacists and 
+administrators—and the system. The pharmacists interact 
+with the application by inputting for drug categories and 
+forecast dates, viewing of predictions and utilizing the results 
+for inventory management. In fact, experts who maintain the 
+system include administrators who update datasets, uphold 
+the functioning of the prediction model, and fix technical 
+problems [12]. A key functionality diagram has been given 
+which shows key functionalities such as data input, result 
+retrieval, and system management and illustrates how 
+different user roles participate in working of the system. Use 
+case diagram provides a visual view of the interactions, 
+which also gets us the idea about the use of the application 
+and the involvement of the users [16]. 
+ 
+ 
+Fig. 5.   Use case diagram 
+ 
+ 
+7.2) Activity Diagram: This Activity Diagram 
+represents the sequential flow of actions within the system, 
+from system input to system display. Then we start with users 
+inputting the data (right), which includes drug category and 
+prediction date. Then, the backend processes this data and 
+then generates predictions through the use of the SARIMA 
+model. This output is then validated and processed by the 
+system, and results are then displayed on the user interface as 
+long as they met the accuracy thresholds [8]. Decision points 
+are also captured in the diagram, such as whether the input 
+data is valid, and it outlines when an error handling needs to 
+take place. This whole representation of activities guarantees 
+the system design to be clear enough on how all its activities 
+work, thus making it easy to debug, change or scale the 
+application in the future [5]. 
+ 
+ 
+Fig. 6.   Activity diagram 
+      Together, these diagrams give a clear and structured 
+picture of the design of the system: including the details of 
+how the technical elements work together, and also how 
+user-centric functions support the system's goals.  
+IV. DISCUSSION  
+      In this project Our aim is to create a locally host website 
+for a pharmacy of an area to predict medical drug sales in that 
+area for categorical drugs. Through this project we basically 
+give the output as predicted sales for a chosen drug category 
+for a given date. And visualize the historical sales and 
+forecasted sales up until the input date by a plot. For this 
+whole project we went through several processes. 
+ 
+      1)Find a data set: We spend more time to find an actual 
+data set. As a result of it We finally found an actual pharmacy 
+data set. So, this leads us to a real-world application. Data 
+pre-processing at this point we had to do remake the data set 
+according to our project. We had to categorize data under 
+eight categories, handle missing values and remove outliers. 
+We got a structured data set which allows for meaningful 
+forecasting. Then we did a stationarity check, we used the 
+Augmented Dickey-Fuller (ADF) test to check stationarity in 
+the sales data.  
+ 
+      In our case it was non-stationary because we found that  
+p-value is 1. Then we used differencing to make it stationary 
+because stationarity is crucial for time series models like 
+SARIMA.          
+ 
+      2)Model selection and fitting: We chose Seasonal 
+Autoregressive Integrated Moving Average (SARIMA) 
+model with the parameters that we got through the previous 
+tests.  The SARIMA model was fit to the historical sales data 
+for each medical drug category. The fitting process involved 
+optimizing parameters to minimize prediction error. Our 
+model forecasts future sales for a particular category weekly, 
+including point forecasts (predicted mean). Finally, we 
+created an accurate model.  
+ 
+      3)Frontend development: We created a user interface 
+which is a user-friendly and attractive web front end for our 
+project using HTML, CSS. The user should give the category 
+and date, then the prediction value and a user-friendly plot 
+shows in UI as the output.  
+ 
+      4)Backend development: Python flask API is the backend 
+of our project which handles the communication between 
+front end and the prediction model successfully. 
+      5)Significance of this study: This study plays a crucial 
+role in improving pharmaceutical sales forecasting, 
+particularly in Sri Lanka, where such applications remain 
+underexplored. By leveraging the SARIMA model, the 
+research enhances accuracy in predicting drug demand, 
+helping to minimize shortages and overstocking.   
+ 
+      The integration of machine learning with inventory 
+management optimizes supply chain efficiency, reducing 
+costs and 
+ensuring 
+better 
+availability 
+of 
+essential 
+medications. This contributes to the advancement of AI-
+driven decision-making in healthcare logistics.   
+
+      6)Identified limitations: The limitations of the research 
+include data availability and quality, as the accuracy of 
+predictions relies on the availability and reliability of 
+historical sales data, with missing or inconsistent data 
+potentially affecting model performance. Additionally, the 
+model does not account for external factors such as economic 
+conditions, policy changes, or sudden health crises that could 
+impact drug sales. The study's regional specificity also limits 
+its generalizability to other areas with different market 
+dynamics. Furthermore, more sophisticated models may 
+require significant computational power, which could pose 
+challenges for real-time forecasting in resource-constrained 
+environments. 
+ 
+      Furthermore, the study's findings can serve as a 
+foundation for future research, encouraging the adoption of 
+more advanced AI models like LSTM and XGBoost for 
+improved forecasting accuracy. 
+V. CONCLUSION 
+      Interpret prediction sales values of medical drug 
+categories for future dates is the main result of our project. 
+And we used SARIMA to build our model, the SARIMA 
+model demonstrated robustness in capturing seasonal 
+patterns and trends in the sales data, providing reliable 
+forecasts that can be trusted by pharmacies for decision 
+making. And our model built up as a weekly prediction 
+model. As a result, we can see the mean prediction value for 
+the week that your input date in. We build up this model by 
+targeting a pharmacy. So, user can decide the number of 
+drugs for each category that they need for a date or a week, 
+therefore the pharmacy can identify most needed medical 
+drugs for a particular time for their area. Because of that they 
+get a higher profit from reducing the drug shortage and drug 
+wastage. 
+ 
+      In the other hand patients can buy medicines when they 
+need it, this helps to make a healthiness society. The results 
+of our project will give benefits for manufacturing companies 
+of medical drugs to reduce drug wastage save their money as 
+well as for the government to import medical drugs according 
+to the demand by expanding this application over the country. 
+ACKNOWLEDGMENT  
+ 
+I would like to thank Dr. Madusha Chandrasena and Dr. 
+Navodi Melaka for their invaluable guidance and support 
+throughout this project. I also appreciate the pharmacies and 
+institutions that provided the data for this study. Special 
+thanks to my colleagues for their valuable insights and to my 
+family and friends for their encouragement during this 
+research. 
+ REFERENCES 
+[1] 
+D. Berrar, "Bayes' Theorem and Naive Bayes Classifier," in 
+Encyclopedia of Bioinformatics and Computational Biology, vol. 1, 
+S. Ranganathan, Ed. Amsterdam, Netherlands: Elsevier, 2019, pp. 
+403–412.  
+[2] 
+L. Aburto and R. Weber, "Improved supply chain management based 
+on hybrid demand forecasts," Appl. Soft Comput., vol. 11, no. 1, pp. 
+136–144, Jan. 2011.  
+[3] 
+A. E. Mancuso, A. Sacchi, G. D'Errico, M. Frontini, and M. Costabile, 
+"Forecasting of Pharmaceutical Sales: An Empirical Review of 
+Current Forecasting Techniques Applied to Drug Portfolio Through 
+Italian Sales Data," in Pharmaceutical Marketing in the 21st Century, 
+M. Gagnon, Ed. New York, NY, USA: Springer, 2020, pp. 151–184.  
+[4] 
+Z. W. Pamungkas, "Comparison of Single, Double and Triple 
+Exponential Smoothing Methods in Forecasting ProductionData," J. 
+Phys. Conf. Ser., vol. 1397, no. 1, p. 012008, Nov. 2019.  
+[5] 
+İ. T. Özel, H. İ. Tanuğur, and A. H. Taşçıoğlu, "Seasonal Time Series 
+Forecasting by Using Exponential Smoothing Methods and Holt-
+Winters Models," in Proc. Int. Conf. Eng. Comput. Educ. (IMECE), 
+and Int. Conf. Eng. Comput. Educ. (BEYCA), 2021, pp. 17–26.  
+[6] 
+S. R. Dutta, "Predicting Sales using Time Series Modeling: Case of 
+an Indian Consumer Electronics Company," Int. J. Res. Anal. Rev., 
+vol. 8, no. 1, pp. 253–260, Mar. 2021.  
+[7] 
+E. Zunic et al., "Next-Day Cryptocurrency Price Forecasting Using 
+Facebook's Prophet on a Hybrid Neural Network Architecture," Appl. 
+Sci., vol. 11, no. 11, p. 4963, May 2021.     
+[8] 
+K. A. L. Bandara, D. N. Ranasinghe, C. N. Dewage, and D. D. 
+Karunarathne, "Pharmaceutical Sales Forecasting Using Machine 
+Learning Techniques," in Proc. 15th Int. Res. Conf. Manag. Finance, 
+2021, pp. 203– 218.         
+[9] 
+Y. Han and S. Yang, "Pharmaceutical Sales Forecasting Model Based 
+on LSTM," in Proc. 5th Int. Conf. Electron. Commun. Mater. 2021, 
+pp. 223–227.     
+[10] T. Chen and C. Guestrin, "XGBoost: A Scalable Tree Boosting 
+System," in Proc. 22nd ACM SIGKDD Int. Conf. Knowl. Discovery 
+Data Mining, Aug. 2016, pp. 785–794.        
+[11] R. F. Manni, "Forecasting Seasonal Pharmaceuticals," J. Res. Ind. 
+Mark., vol. 1, no. 1, pp. 1–5, Aug. 2022.     
+[12] BioPhorum Operations Group, "Best Practices Guide for Improving 
+Forecasting Capabilities and Aligned Collaboration," BioPhorum 
+Operations Group,  
+Guide,  
+2022. [Online]. Available: 
+https://www.biophorum.com/resource_lib/improvingforecastingcapa
+bilities-andalignedcollaboration/     
+[13] A. Moosivand, A. R. Ghatari, and A. H. Rasekh, "Supply chain 
+challenges in pharmaceutical manufacturing companies: Using 
+interpretive structural modeling," Supply Chain Manag., vol. 24, no. 
+6, pp. 828–842, Oct. 2019.         
+[14] Z. Yani and A. Aamer, "Machine learning in pharmaceutical supply 
+chains: A review," J. Manuf. Syst., vol. 65, pp. 447–469, Oct. 2022.      
+[15] Y. Zhu, R. Wang, S. Cheded, L. Eichberger, and Q. Xia, "AI-based 
+pharmaceutical demand forecasting framework for business planning 
+and production scheduling," in Proc. IEEE 19th Int. Conf. Autom. Sci. 
+Eng. (CASE), Aug. 2022, pp. 633–640.     
+[16] J. Zdravkovic, M. Đorđevic, M. Pamucar, and D. Pamucar, 
+"Effectiveness of univariate time series analysis in forecasting 
+pharmaceutical products sales for pharmacies," Oper. Res. Eng. Sci. 
+Theory Appl., vol. 4, no. 2, pp. 17–22, Jul. 2021.     
+[17] KPMG, "Pharma 2030: From evolution to revolution," KPMG 
+International Cooperative, Report, 2020. [Online]. Available: 
+https://assets.kpmg/content/dam/kpmg/xx/pdf/2020/10/pharma-
+2030.pdf     
+[18] F. Luo, J. Cao, and G. Mercier, "Transfer Learning for Sparse Time 
+Series Forecasting," in Proc. IEEE Int. Conf. Big Data, Dec. 2021, pp. 
+5241– 5250. 
+[19] R. Guidotti et al., "A Survey of Methods for Explaining Black Box 
+Models," ACM Comput. Surv., vol. 51, no. 5, pp. 1–42, Jan. 2019.   .     
+[20] Z. Obermeyer, B. Powers, C. Vogeli, and S. Mullainathan, "Dissecting 
+racial bias in an algorithm used to manage the health of populations," 
+Science, vol. 366, no. 6464, pp. 447–453, Oct. 2019.     
+[21] U. M. Sirisha, M. C. Belavagi, and G. Attigeri, "Profit Prediction Using 
+ARIMA, SARIMA and LSTM Models in Time Series Forecasting: A  
+Comparison," IEEE Access, doi: 10.1109/ACCESS.2017.DOI   
+[22] K. Alice, S. H. ul Haq Andrabi, and S. Jha, “Sales forecasting based on 
+Ensemble Predictions”  
+ 
+ 
+ 
+ 

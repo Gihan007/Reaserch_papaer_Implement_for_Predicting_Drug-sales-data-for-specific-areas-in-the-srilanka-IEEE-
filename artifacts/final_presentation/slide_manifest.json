@@ -1,0 +1,245 @@
+[
+  {
+    "number": 1,
+    "title": "Intelligent Drug Sales Forecasting",
+    "section": "CSCI 43018 • Research Project",
+    "seconds": 30,
+    "notes": "Good morning. I am Bope Ranasinghage Gihan Lakmal, CS/2020/015. My project is Intelligent Drug Sales Forecasting and Healthcare Insights with Artificial Intelligence, supervised by Professor N. G. J. Dias. I developed a category-wise forecasting application for pharmaceutical demand planning. I will explain the data, implemented methods, recorded results and practical application, followed by the main limitations.",
+    "source": "Final_1 thesis, cover and Chapters 3–6",
+    "backup": false
+  },
+  {
+    "number": 2,
+    "title": "From the research problem to the application",
+    "section": "Overview",
+    "seconds": 20,
+    "notes": "The presentation follows five stages: the problem and objectives; the dataset and methods; the application architecture; the experimental findings; and the demonstration, limitations and conclusion. The planned speaking time is under twenty minutes, including the embedded walkthrough. Detailed results and implementation notes are available in hidden backup slides for the panel discussion.",
+    "source": "",
+    "backup": false
+  },
+  {
+    "number": 3,
+    "title": "The problem: planning stock from changing sales",
+    "section": "Problem",
+    "seconds": 50,
+    "notes": "The project addresses pharmaceutical sales forecasting as a stock-planning problem. Too little stock can leave demand unmet; too much stock ties up working capital and can lead to expiry. Different drug categories have different demand levels and patterns, so a single forecasting method may not work equally well for every category. The research question is how to compare multiple forecasting approaches and make their outputs accessible through a usable application. The implemented forecasts use category sales history. Regional deployment is the intended application context; the bundled dataset does not contain separate region identifiers.",
+    "source": "Thesis §§1.2–1.6; data/raw/C1.csv–C8.csv",
+    "backup": false
+  },
+  {
+    "number": 4,
+    "title": "Objectives and the delivered scope",
+    "section": "Objectives",
+    "seconds": 45,
+    "notes": "The main aim was to implement an AI-based drug sales forecasting system. I organised weekly sales into eight categories, implemented several model families, compared the seven models for which saved metrics are available, and exposed the forecasting and explanation functions through a web application. The research also contains experimental advanced-AI components. I distinguish those extensions from the core models with recorded comparative results. The practical contribution is the integrated forecasting workflow and category-level analysis, rather than a claim that a new forecasting algorithm has been invented.",
+    "source": "Thesis §1.4; model_metrics.json; services/ and src/models/",
+    "backup": false
+  },
+  {
+    "number": 5,
+    "title": "Related work motivates a broader comparison",
+    "section": "Literature",
+    "seconds": 60,
+    "notes": "The directly related 2025 paper by Ekanayake and colleagues, including myself, used SARIMA with a Flask application for categorical drug sales. That provides the earlier project context. Ke and colleagues introduced LightGBM as an efficient gradient-boosted tree method, supporting its inclusion in the comparison. Hewamalage, Bergmeir and Bandara reviewed recurrent networks for time-series forecasting, motivating the LSTM and GRU comparisons. The present project extends the earlier category-wise application through additional model families, explanation support and modular services. I am not claiming that forecasting dashboards or model comparison are absent from all prior research.",
+    "source": "Ekanayake et al. (2025), local paper; Ke et al. (2017) [2]; Hewamalage et al. (2021) [3]",
+    "backup": false
+  },
+  {
+    "number": 6,
+    "title": "The dataset: eight weekly sales series",
+    "section": "Data",
+    "seconds": 65,
+    "notes": "The dataset consists of eight category CSV files, each with 517 weekly observations, covering 12 January 2014 to 3 December 2023. The final data was described as an approximately equal mixture of real sales from two pharmacies in Kurunegala and synthetic data, which I confirmed when preparing these slides. The CSV files do not label individual rows by source, so exact real-versus-synthetic row counts cannot be independently separated. Across the eight files there are 4,136 category-week values, not 4,136 independent dates. The files have no missing cells or duplicate dates and all adjacent dates are seven days apart. There is no pharmacy or region column, so the measured results concern categories rather than regional generalisation.",
+    "source": "data/raw/C1.csv–C8.csv; thesis §3.2; student confirmation, 13 Sep 2026",
+    "backup": false
+  },
+  {
+    "number": 7,
+    "title": "A model-specific preparation and forecasting pipeline",
+    "section": "Methodology",
+    "seconds": 70,
+    "notes": "Each CSV is parsed as an ordered time series. The input representation then depends on the model. XGBoost and LightGBM use five previous sales observations as lag features. LSTM, GRU and the standard Transformer use ten-observation sequences in their default paths. Statistical models use the dated series directly. LightGBM and the main sequence models apply MinMax scaling, and predictions are transformed back to the original sales scale. Model files and scalers are stored for reuse where supported. One current exception is LightGBM: its forecasting function retrains a small local model because saved native artifacts are not portable across all local builds. This slide shows the implemented preparation process; it does not assert that the archived benchmark used a verified common held-out split.",
+    "source": "src/utils/preprocessing.py; src/models/{lightgbm,lstm,gru,transformer}_model.py",
+    "backup": false
+  },
+  {
+    "number": 8,
+    "title": "Statistical and machine learning methods",
+    "section": "Methodology",
+    "seconds": 60,
+    "notes": "SARIMAX and Prophet provide statistical comparisons. The evaluator configures SARIMAX with order one-zero-zero and seasonal order one-zero-zero-seven. Because the input rows are weekly, that seasonal period is seven observations, not seven days. Prophet receives a date column named ds and target named y. The two machine-learning approaches are XGBoost and LightGBM, both using lagged sales values. XGBoost is a boosted-tree regressor. The current LightGBM function uses MinMax-normalised lags, 31 leaves, learning rate 0.05 and 100 boosting rounds. These are implementation defaults; I do not claim the separate optimisation JSON was used to produce every saved metric.",
+    "source": "src/evaluation/model_evaluation.py; src/models/{sarimax,prophet,xgboost,lightgbm}_model.py",
+    "backup": false
+  },
+  {
+    "number": 9,
+    "title": "Deep learning uses sequences of past sales",
+    "section": "Methodology",
+    "seconds": 60,
+    "notes": "The standard LSTM and GRU implementations use two recurrent layers with 64 hidden units and dropout of 0.1. A linear output layer predicts the next sales value from the last hidden output. Their default input window contains ten weekly observations. The standard Transformer uses a model dimension of 64, four attention heads and two encoder layers, followed by a scalar prediction head. Predictions can be fed back recursively to obtain additional steps. The repository also contains TFT, N-BEATS and Informer implementations. However, those three do not have results in the saved seven-model comparison. N-BEATS is a separate forecasting architecture and should not be classified as a Transformer model.",
+    "source": "src/models/{lstm,gru,transformer,tft,nbeats,informer}_model.py; model_metrics.json",
+    "backup": false
+  },
+  {
+    "number": 10,
+    "title": "Stacking now has measured forecasting results",
+    "section": "New stacking experiment",
+    "seconds": 50,
+    "notes": "Stacking has now been implemented and evaluated using XGBoost, LSTM and GRU as base models, combined by StandardScaler and Ridge regression. Three expanding chronological blocks provide thirty out-of-fold prediction rows to train the combiner. For each category, the first 507 weeks are available for training, and the last ten weeks, from 1 October to 3 December 2023, are reserved for testing. Stacking achieved average MAE 30.2059 and RMSE 36.0614. It improved over the last-value naive baseline, but equal averaging and the individual bases were better on mean absolute error in this experiment. These are new results from a different protocol and must not be directly ranked against the thesis's original seven-model table.",
+    "source": "src/evaluation_results/stacking_results.json; src/models/stacking_model.py; new run, 13 Sep 2026",
+    "backup": false
+  },
+  {
+    "number": 11,
+    "title": "A modular application connects users and models",
+    "section": "Implementation",
+    "seconds": 55,
+    "notes": "The current web application is served by FastAPI with Jinja templates and browser-side JavaScript. The frontend sends requests through the gateway. The repository separates forecasting, training, explanation and advanced-AI code into services. In the current gateway implementation, the forecast endpoint directly calls the shared forecasting function, so the diagram represents component responsibilities and not a claim that every request makes a network hop to a separate process. Saved models, scalers and CSV data support these components. Docker Compose and Kubernetes configuration are included, but this presentation does not claim a measured production deployment or a completed load test.",
+    "source": "services/; apps/api_gateway/main.py; infra/docker/; infra/kubernetes/",
+    "backup": false
+  },
+  {
+    "number": 12,
+    "title": "Evaluation: distinguish the original and new experiments",
+    "section": "Evaluation",
+    "seconds": 65,
+    "notes": "The presentation contains two separate experiments. The original saved benchmark compares seven models across eight categories and has a target-alignment and full-series fitting limitation. Its results remain labelled as archived. The new stacking experiment trains its base models and scalers only on earlier records, uses three chronological validation blocks to train Ridge, and reserves the final ten weeks as an untouched test. Stacking, equal averaging, the three bases and a naive baseline are compared on exactly the same test dates in this new run. Both sets use mean category MAE and RMSE, but their different training and evaluation procedures prevent direct cross-table ranking. MAPE is undefined if a held-out actual is zero.",
+    "source": "src/evaluation/model_evaluation.py; model_metrics.json; performance_summary.json",
+    "backup": false
+  },
+  {
+    "number": 13,
+    "title": "Original benchmark: LightGBM leads on absolute error",
+    "section": "Results",
+    "seconds": 65,
+    "notes": "This chart orders the seven models by average MAE. LightGBM has the lowest recorded MAE of 23.3728 and RMSE of 28.9163, followed by LSTM and GRU on both absolute-error metrics. XGBoost has an average MAE of 25.4679. SARIMAX and Prophet have larger absolute errors in these saved results. The choice of metric matters: Transformer has the lowest average MAPE at 53.6691 percent, even though it is not best on MAE or RMSE. Because category scales differ and the evaluation has the limitation described on the previous slide, these figures are descriptive comparisons of the archived experiment, not a guarantee of future performance.",
+    "source": "performance_summary.json; values checked against category means in model_metrics.json",
+    "backup": false
+  },
+  {
+    "number": 14,
+    "title": "Original benchmark: the best model varies by category",
+    "section": "Results",
+    "seconds": 55,
+    "notes": "The category-level comparison shows why the application supports model choice. GRU has the lowest recorded MAE for C1. Prophet is lowest for C2 and C3, LightGBM for C4, LSTM for C5, C6 and C8, and XGBoost for C7. That means LSTM leads in three categories while LightGBM leads on average. C4 has a much larger error scale than C6, so an average absolute error can be influenced by higher-volume categories. Selecting a model from the same results used to judge it is descriptive; a production selection rule would require separate validation and later testing. These category winners do not establish the best model for an unobserved pharmacy or region.",
+    "source": "src/evaluation_results/model_metrics.json; minimum MAE within each category",
+    "backup": false
+  },
+  {
+    "number": 15,
+    "title": "Explainability must name the method actually returned",
+    "section": "Explainability",
+    "seconds": 55,
+    "notes": "The explanation service attempts SHAP-based interpretation and also provides a fallback. This saved example is explicitly labelled fallback_lag_importance. Its top feature is sales_lag_4 with a normalised importance of approximately 0.2664. The fallback uses model feature importance where available, otherwise normalised absolute correlations with the target. It therefore gives a relative ranking of lag features. It does not establish that a particular lag caused demand, and it is not equivalent to a signed local SHAP explanation of an individual prediction. The application should report which method was returned so users can interpret the chart correctly.",
+    "source": "Saved fallback_importance_C1_xgboost_20260712_042311.png; shap_explainer.py §§411–458; thesis §4.4",
+    "backup": false
+  },
+  {
+    "number": 16,
+    "title": "Advanced AI modules are experimental extensions",
+    "section": "Research extensions",
+    "seconds": 55,
+    "notes": "Beyond the core forecast comparison, the repository contains advanced research modules. A saved C1 neural architecture search evaluated eight architectures. Its losses are on a scaled series and cannot be directly compared with the sales-scale MAE table. A recorded federated test used two simulated clients and one FedAvg round; this is not a field trial across independent pharmacies. Meta-learning and adaptation workflows are implemented, but the recorded status says the MAML model was not trained at that point. The causal-analysis output includes correlations with time features; this does not establish causal effects. These components demonstrate implemented research workflows, without a verified comparative accuracy gain for the main forecast benchmark.",
+    "source": "nas_results_C1_1783854913.json; fed_results_C1_iid_1783854914.json; causal_discovery_C1.json; thesis §§4.5,4.8",
+    "backup": false
+  },
+  {
+    "number": 17,
+    "title": "Application demonstration • embedded offline walkthrough",
+    "section": "Application",
+    "seconds": 85,
+    "notes": "I will now play a 45-second silent walkthrough assembled from the project interface and saved outputs. First, the interface allows the user to choose a category, date and forecasting method. Second, the recorded historical example requests C1 on 15 January 2018 and returns the nearest stored weekly observation, 14 January 2018, with sales of 28.33. This is a historical lookup, not a prediction of an unseen value. Third, the explanation example shows the saved fallback importance chart. The film uses archived screens and does not show a fresh live backend run. The following hidden backup slide includes the same screens if video playback is unavailable. Click the video to start; it has no audio.",
+    "source": "Project UI screenshot; C1 historical output chart; saved C1 fallback explanation; 45-second silent MP4",
+    "backup": false
+  },
+  {
+    "number": 18,
+    "title": "Stacking passes functional and chronological checks",
+    "section": "Verification",
+    "seconds": 40,
+    "notes": "The updated implementation passed sixteen Python tests, covering the existing service smoke checks and new stacking checks, plus one JavaScript UI test. Tests verify that future holdout values do not enter model fitting, each horizon is combined separately, weekly date conversion is correct, and missing or stale artifacts fail explicitly. All eight full-history model bundles were also loaded and generated finite ten-week forecasts. A real gateway request for C1 on 11 December 2023 returned approximately 53.0036 for the corresponding weekly endpoint, 17 December. The stacking interface now uses actual historical values and recorded held-out scores, rather than the old placeholder metrics and charts. This integration check is separate from the unseen-future evaluation.",
+    "source": "tests/test_stacking.py; tests/test_services_smoke.py; tests/test_stacking_ui.cjs; stacking_integration_checks.json",
+    "backup": false
+  },
+  {
+    "number": 19,
+    "title": "Limitations define the next research steps",
+    "section": "Limitations & future work",
+    "seconds": 65,
+    "notes": "There are four main limitations. First, the dataset contains synthetic augmentation and has neither source labels nor region identifiers, so future work needs traceable real data from more pharmacies. Second, the original archived evaluator still needs a consistent chronological design. The new stacking experiment now uses an untouched ten-week test and chronological meta-training, but that fix does not retroactively validate the older results. Third, stacking now converts dates to weekly horizons and limits predictions to its trained ten-step horizon. Older model routes still need the same date alignment correction. Fourth, low-volume series make percentage errors unstable. The full C6 series contains 46 zeros, although this does not mean all are in the evaluation window. Future evaluation should add suitable low-volume metrics and simple naive baselines. Real inventory impact has not yet been measured.",
+    "source": "CSV audit; src/evaluation/model_evaluation.py; forecast_service/app/forecasting.py; thesis §§5.6,6.7",
+    "backup": false
+  },
+  {
+    "number": 20,
+    "title": "Conclusion: a working platform with clear research findings",
+    "section": "Conclusion",
+    "seconds": 45,
+    "notes": "The project delivered a category-wise forecasting platform with a web interface, model comparison, stored artifacts and explanation support. In the saved seven-model comparison, LightGBM has the lowest average MAE and RMSE. Category-wise results show that the lowest-error model changes across categories. Explainability is useful when its returned method and limits are explicit. The new stacking experiment now has a consistent future holdout: its mean MAE is 30.2059, compared with 24.2382 for equal averaging. The next priority is broader real-data evaluation, followed by testing the system in pharmacy operations. The system provides a foundation for demand planning, while actual reductions in shortages or wastage remain future outcomes to measure.",
+    "source": "Thesis Chapters 4–6; saved evaluation artifacts and implementation audit",
+    "backup": false
+  },
+  {
+    "number": 21,
+    "title": "Selected references",
+    "section": "References",
+    "seconds": 10,
+    "notes": "These are the key sources cited in the talk. Reference one is the directly related categorical drug-sales paper stored with the project. References two and three support the selected machine-learning and recurrent modelling methods. The exact project figures come from the thesis, source code and saved JSON files identified in the notes and accompanying evidence report.",
+    "source": "Local project paper; NeurIPS proceedings; International Journal of Forecasting; final thesis and repository",
+    "backup": false
+  },
+  {
+    "number": 22,
+    "title": "Thank you",
+    "section": "Acknowledgement & questions",
+    "seconds": 10,
+    "notes": "Thank you to Professor N. G. J. Dias for his guidance, to the Faculty of Computing and Technology, and to the people who supported the project. Thank you for listening. I welcome the panel's questions. Hidden backup slides contain exact metrics, model settings, category mapping, evaluation details and the offline demonstration screens.",
+    "source": "",
+    "backup": false
+  },
+  {
+    "number": 23,
+    "title": "Complete recorded model metrics",
+    "section": "Backup A",
+    "seconds": 0,
+    "notes": "Use this table for numerical questions. The errors and timings are arithmetic averages across eight categories. Timing is taken from the archived evaluator; it includes path-specific loading and computation and is not a controlled current-production latency benchmark. The source data is preserved at four decimals. Different metrics give different rankings.",
+    "source": "src/evaluation_results/performance_summary.json",
+    "backup": true
+  },
+  {
+    "number": 24,
+    "title": "Implementation defaults and category mapping",
+    "section": "Backup B",
+    "seconds": 0,
+    "notes": "These settings were read from current source files. They are not asserted to be the exact configurations behind all archived metrics. XGBoost and LightGBM use five lags; the standard LSTM, GRU and Transformer use ten-step windows. The category-to-code mapping is checked by comparing all values in each C1–C8 file with the corresponding column in the combined CSV. The codes identify drug categories; they are not regional labels.",
+    "source": "src/models/; data/raw/pharama weekly sales copy.csv and C1.csv–C8.csv",
+    "backup": true
+  },
+  {
+    "number": 25,
+    "title": "How to interpret the evaluation limitation",
+    "section": "Backup C",
+    "seconds": 0,
+    "notes": "The thesis describes chronological train–test separation. The available evaluator sets actual_values to the last ten observations, fits SARIMAX on the complete series and requests predictions over its final ten indices. Several other functions instead read the full CSV and predict beyond its end. That compares different effective horizons and does not prove an unseen-future holdout. Correct evaluation should choose a cutoff, fit preprocessing and each model using only earlier observations, generate the same ten future weekly timestamps, and score against aligned actuals. Repeat across origins if data allows. The presentation does not invent a split percentage or claim a rerun.",
+    "source": "src/evaluation/model_evaluation.py lines 42–80; model-specific forecast functions",
+    "backup": true
+  },
+  {
+    "number": 26,
+    "title": "Dataset profiles: different scales and demand patterns",
+    "section": "Backup D",
+    "seconds": 0,
+    "notes": "These are descriptive plots of the bundled CSV values, not predictions. Each panel uses its own sales axis. The full dataset has 46 zero values in C6; this should not be confused with the number of zeros in any evaluation window. Source mix is student-confirmed at approximately 50:50. Exact row provenance remains unavailable.",
+    "source": "data/raw/C1.csv, C4.csv, C6.csv",
+    "backup": true
+  },
+  {
+    "number": 27,
+    "title": "Demonstration fallback: saved project screens",
+    "section": "Backup E",
+    "seconds": 0,
+    "notes": "Use these static images if the embedded MP4 cannot play. The interface is a saved project screen. The chart shows the historical C1 lookup: requested date 2018-01-15, nearest observation 2018-01-14, sales 28.33. This is not a future forecast or an accuracy test. The saved importance chart is available on the main explainability slide.",
+    "source": "Project UI screenshot and C1_2018_01_15_xgboost_forecast.png",
+    "backup": true
+  }
+]

@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ConfigDict
 
 from libs.common.metrics import install_metrics
-from services.forecast_service.app.forecasting import forecast_sales
+from services.forecast_service.app.forecasting import forecast_sales, stacking_response_details
 
 
 app = FastAPI(title="Forecast Service")
@@ -42,6 +42,8 @@ async def forecast(payload: ForecastRequest):
             "model_used": str(model_used),
             "category": payload.category,
             "input_date": payload.date,
+            **(stacking_response_details(payload.category, forecast_value, closest_prediction_date)
+               if payload.model_type == "stacking" else {}),
         }
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc

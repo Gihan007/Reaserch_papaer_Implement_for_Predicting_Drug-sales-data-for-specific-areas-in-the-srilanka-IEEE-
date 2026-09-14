@@ -121,22 +121,20 @@ class SHAPExplainer:
     def explain_lightgbm(self, model_path=None, n_samples=100):
         """Generate SHAP explanation for LightGBM model"""
         try:
-            import lightgbm as lgb
             shap = _load_shap()
-            
-            # Load model
-            if model_path is None:
-                model_path = _model_path('models_lightgbm', f'{self.category}_lightgbm.txt', self.base_path)
-            
-            if not os.path.exists(model_path):
-                return None
-            
-            model = lgb.Booster(model_file=model_path)
-            
-            # Load data and create features
+
+            # The checked-in native LightGBM text artifacts are not portable
+            # across all LightGBM builds. Match the live forecast path by
+            # fitting a small local model from the bundled category series.
             csv_path = _category_csv_path(self.category, self.base_path)
             df = pd.read_csv(csv_path, index_col=0, parse_dates=True)
-            X, y = self.create_features(df, n_lags=5)
+            from src.models.lightgbm_model import train_lightgbm_model
+
+            values = df[self.category].to_numpy(dtype=float)
+            model, scaler = train_lightgbm_model(values, n_lags=5)
+            scaled = scaler.transform(values.reshape(-1, 1)).ravel()
+            scaled_frame = pd.DataFrame({self.category: scaled}, index=df.index)
+            X, y = self.create_features(scaled_frame, n_lags=5)
             
             # Use last n_samples for SHAP analysis
             X_sample = X[-n_samples:]
